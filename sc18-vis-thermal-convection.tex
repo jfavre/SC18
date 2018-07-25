@@ -87,7 +87,7 @@ OSPRay-based implementation.
 \begin{keyword}
 
 %% keywords here, in the form: keyword \sep keyword
-scientific visualization \sep high performance computing \sep Naviers-Stokes solver
+Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Solver \sep Direct Numerical Simulation \sep Computational Fluid Dynamics
 
 \end{keyword}
 
@@ -99,7 +99,7 @@ scientific visualization \sep high performance computing \sep Naviers-Stokes sol
 \section{Introduction}
 \label{sec:Introduction}
 
-Oceans play a bit role in the nature of our planet. About $ 70 \% $ of our earth
+Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
 is covered by water. Strong currents are transporting warm water around the world
 and therefore don't only make life possible, but also allow us to harvest its
 power producing energy. But humanity tends to easily forget that oceans also
@@ -113,11 +113,11 @@ an oceanic staircase to understanding nature.
 \section{Numerical Simulations}
 
 A more fundamental setup of this natural mechanism is sheared thermal convection.
-Many processes in nature can be based on the interaction of heat and momentum
-transfer and therefore the correlation of buoyancy and shear in a flow. Direct
-numerical simulations were performed with our second-order finite-difference
-code \cite{poe15c} using the following three-dimensional non-dimensional
-Navier-Stokes equations with the Boussinesq approximation on a staggered grid:
+Many processes in nature can be based on heat and momentum
+transfer and therefore interaction between buoyancy and shear. Direct
+numerical simulations (DNS) were performed with the second-order finite-difference
+code \textit{AFiD} \cite{poe15c} in which the three-dimensional non-dimensional
+Navier-Stokes equations with the Boussinesq approximation on a staggered grid are solved:
 
 \begin{equation} %NS equation
 \frac{\partial \boldsymbol{u}}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \boldsymbol{u} =-\bm{\nabla} P + \left(\frac{Pr}{Ra} \right)^{1/2} \nabla^2\boldsymbol{u}+\theta \hat{z}, 
@@ -134,11 +134,11 @@ Navier-Stokes equations with the Boussinesq approximation on a staggered grid:
 \label{eqn:temp} \\[8pt]
 \end{equation}
 
-We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with streamwise, spanwise and wallnormal components. $ \theta $ is the non-dimensional temperature ranging from $ 0 \leq \theta \leq 1 $. The simulations are performed in a computational box with periodic boundary conditions in streamwise and spanwise directions and confined by a heated plate below and a cooled plate on top of the flow. The shearing of the flow is implemented by a Couette flow setting where both top and bottom plates of the flow are moved in opposite directions with the speed $ u_w $ keeping the average bulk velocity at zero and therefore minimizing dissipation errors. The size of the flow field is ($ L_x \times L_y \times L_z $) = ($ 9\pi h \times 4\pi h \times h $) using a grid of ($ n_x \times n_y \times n_z $) = ($ 6912 \times 3456 \times 384 $) which is homogeneously distributed in the streamwise and spanwise directions and clustered with an error-function $ \eta(\xi)=erf(2\xi)/erf(2) $ in wallnormal direction.
+We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with streamwise, spanwise and wallnormal components. $ \theta $ is the non-dimensional temperature ranging from $ 0 \leq \theta \leq 1 $. The simulations are performed in a computational box with periodic boundary conditions in streamwise and spanwise directions and confined by a heated plate below and a cooled plate on top. The shearing of the flow is implemented by a Couette flow setting where both top and bottom plates of the flow are moved in opposite directions with the speed $ u_w $ keeping the average bulk velocity at zero and therefore minimizing dissipation errors. The domain size is ($ L_x \times L_y \times L_z $) = ($ 9\pi h \times 4\pi h \times h $) using a grid of ($ n_x \times n_y \times n_z $) = ($ 6912 \times 3456 \times 384 $) which is homogeneously distributed in the streamwise and spanwise directions and clustered with an error-function $ \eta(\xi)=erf(2\xi)/erf(2) $ in wallnormal direction.
 
-Our open sourced finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using a MPI, OpenMP and CUDA Fortran hybrid implementation optimized to run and solve large flow fields.
+The open sourced finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using a MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-For this visualization showcase, data from Blass et al. was used \cite{bla18}, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number (Eqn. \ref{eqn:Ra}), and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number (Eqn. \ref{eqn:Re}), while keeping the Prandtl number (Eqn. \ref{eqn:Pr}), which is the ratio of thermal and viscous viscosity of a fluid, at unity. The equations read:
+For this visualization showcase, data from Blass et al. \cite{bla18} was used, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number (Eqn. \ref{eqn:Ra}), and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number (Eqn. \ref{eqn:Re}), while keeping the Prandtl number (Eqn. \ref{eqn:Pr}), which is the ratio of thermal and viscous viscosity of a fluid, at unity. The equations read:
 
 \begin{equation} %Ra
 Ra= \frac{\beta gh^3\Delta T}{\kappa\nu}, 
@@ -164,13 +164,13 @@ $ u_w $ the wall velocity.
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{squaredoverview}% 
-	\caption{\label{fig:overview} Instantaneous snapshots of temperature fields
+	\caption{\label{fig:overview} Zoomed instantaneous snapshots of temperature fields
 of a sheared and thermally forced flow transitioning through all flow regimes
 for $ Ra=2.2 \times 10^6 $ and (a) $ Re=0 $, (b) $ Re=2000 $, (c) $ Re=3000 $, (d) $ Re=6000 $.}
 \end{figure}
 
 In Fig. \ref{fig:overview} we present instantaneous snapshots of temperature
-fields in different flow regimes. It can be observed that the flow passes from a
+fields at mid height in different flow regimes. It can be observed that the flow passes from a
 thermally dominated regime with large plumes (Fig. \ref{fig:overview}a) into a
 regime where the mechanical forcing is dominant. Here, large-scale meandering
 structures can be observed (Fig. \ref{fig:overview}d). To transition between the
@@ -191,16 +191,16 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 \end{equation} 
 
 
-Here, $ Q $ is the total vertical heat flux. In pure thermal convection, also called Rayleigh-B\'enard
-convection, the scaling between $ Ra $ and $ Nu $ has been a vital base for many
-studies on their pursuit towards the so called ultimate regime, where the boundary
-layers become turbulent and the $ Nu-Ra $ scaling changes. In the present study
-from Blass et al. \cite{bla18} this was continued by implementing a wall
-shearing to the previously pure thermally driven flow to research if the expected
-ultimate $ Nu-Ra $ scaling can be achieved this way. As previously observed in
-Fig. \ref{fig:overview}, the amount of imposed mechanical forcing is a key factor
-for the emergence of various large-scale structures. These structures are then a
-vital tool to study the behaviour of the heat in the system. 
+%Here, $ Q $ is the total vertical heat flux. In pure thermal convection, also called Rayleigh-B\'enard
+%convection, the scaling between $ Ra $ and $ Nu $ has been a vital base for many
+%studies on their pursuit towards the so called ultimate regime, where the boundary
+%layers become turbulent and the $ Nu-Ra $ scaling changes. In the present study
+%from Blass et al. \cite{bla18} this was continued by implementing a wall
+%shearing to the previously pure thermally driven flow to research if the expected
+%ultimate $ Nu-Ra $ scaling can be achieved this way. As previously observed in
+%Fig. \ref{fig:overview}, the amount of imposed shear is a key factor
+%for the emergence of various large-scale structures. These structures are then a
+%vital tool to study the behaviour of the heat in the system. 
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and dynamic interaction of turbulent structures with each other. 
 
@@ -244,7 +244,7 @@ Tesla P100 GPU (16 Gb RAM), so our preferred rendering mode will be the GPU ray
 casting method;
 Alternatively, the vtkFixedPointVolumeRayCastMapper can be used, but it is of
 less interest in the use case of movie production. We aim to test ParaView's GPU
-ray casting implementation, against an NVIDIA-developped custom library called
+ray casting implementation, against an NVIDIA-developed custom library called
 IndeX, and against a CPU-only solution, to give a valid option to users of
 supercomputers not equipped with GPUs.
 Our performance evaluation is based on ParaView's benchmarking Python source
@@ -291,7 +291,7 @@ but no degradation due to down-converted data.
 
 \subsection{NVIDIA IndeX} \label{index}
 
-NVIDIA IndeX\cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developped to enable
+NVIDIA IndeX\cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developed to enable
 the visualization of massive datasets. NVIDIA has worked in tandem with Kitware to
 bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS),
@@ -346,7 +346,7 @@ In visualizing the temperature field, we seek to highlight the turbulence which
 is best shown by clearly differentiating between cold and hot regions to see how
 they interact with each other. Our movie animation shows an initial phase where
 region of blue tint is superposed on top of the hotter region. Plumes emerging
-from the bottom and mixing into the cold regions highlight this phenomenom.
+from the bottom and mixing into the cold regions highlight this phenomenon.
 
 \subsection{Visual effects}
 
@@ -368,7 +368,7 @@ scenario, data might have to be converted to VTK data structures. Thus, we count
 from the moment ParaView has collected all the data, and we toggle the volumetric
 rendering options which trigger the build of internal structures for ray-tracing.
 If memory costs are substantial, more nodes, and/or more GPUs will be required, increasing the
-run-time cost of the visualization. Our results are of great interest; we were
+run-time cost of the visualization. We were
 pleasantly surprised to find out that the OSPRay based implementation, using a
 single node and 72 execution threads makes the first image at a cost of roughly 7-8 seconds. 
 After the first frame, interactive renderings are done in sub-second times,
@@ -424,7 +424,7 @@ featuring the XYZ library, because justify, justify...
 
 \section*{Acknowledgments}
 
-Alexander Blass conducted his simulation runs at the Swiss National Supercomputing Center, under compute allocations s713 and s802. The authors thank the ParaView development team at Kitware, USA, for fruitfull discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting.
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulation runs at the Swiss National Supercomputing Center, under compute allocations s713 and s802. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting.
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
