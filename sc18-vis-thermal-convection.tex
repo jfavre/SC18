@@ -1,0 +1,424 @@
+%%
+%% LaTeX template for SC18 Scientific Visualization & Data Analytics
+%% Showcase submissions.
+%%
+%% SciVis Showcase submissions must be formatted using Elsevier's document
+%% class `elsearticle'. The necessary class and bibliography style files
+%% are included, but the original package is posted on CTAN at
+%%
+%%     https://ctan.org/tex-archive/macros/latex/contrib/elsarticle
+%%
+
+%% SC SciVis Showcase submissions should use the elsarticle document class
+%% with options `final,5p,times,twocolumn`.
+\documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% Command used to change the verbatim environment font. This is
+%% used for the template's instructions and does not need to remain
+%% for papers using this template.
+\makeatletter
+\newcommand{\verbatimfont}[1]{\def\verbatim@font{#1}}%
+\makeatother
+
+\usepackage{url}
+\usepackage{bm}
+
+%% Accepted SC SciVis Showcase submissions will be published in
+%% Parallel Computing.
+\journal{Parallel Computing}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for theassociated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for theassociated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for theassociated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\title{Volume Renderings of Sheared Thermal Convection}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{}
+%% \address[label1]{}
+%% \address[label2]{}
+
+\author[CSCS]{Jean M. Favre}
+\author[Twente]{Alexander Blass}
+
+\address[CSCS]{Swiss National Supercomputing Center (CSCS), Via Trevano 131, CH-6900 Lugano, Switzerland}
+\address[Twente]{Physics of Fluids Group, Max Planck Center for Complex Fluid Dynamics,
+J. M. Burgers Center for Fluid Dynamics and MESA+ Research Institute,
+Department of Science and Technology,
+University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
+
+\begin{abstract}
+
+We present visualizations of sheared thermal convection in large scale
+wall-bounded turbulent flow simulations. The visualization is based on volume
+renderings of the temperature field. To address the needs of supercomputer users
+with different hardware and software resources, we evaluate different implementations
+supported in the ParaView\cite{Ahrens2005} environment: two GPU-based solutions
+with Kitware's native volume mapper or NVIDIA's IndeX library, and a software-only
+OSPRay-based implementation.
+
+\end{abstract}
+
+\begin{keyword}
+
+%% keywords here, in the form: keyword \sep keyword
+scientific visualization \sep high performance computing \sep Naviers-Stokes solver
+
+\end{keyword}
+
+\end{frontmatter}
+
+%% \linenumbers
+
+%% main text
+\section{Introduction}
+\label{sec:Introduction}
+
+Oceans play a bit role in the nature of our planet. About $ 70 \% $ of our earth
+is covered by water. Strong currents are transporting warm water around the world
+and therefore don't only make life possible, but also allow us to harvest its
+power producing energy. But humanity tends to easily forget that oceans also
+yield a much more deadly side. Floods and tsunamis can easily annihilate whole
+cities and destroy life in seconds. The earth's climate system is also very much
+linked to the circulation in the ocean due to its large coverage of the earth's surface.
+One has to treat the ocean with respect and carefulness, but it is unambiguously
+clear that humanity and its science is just attempting to reach the first step on
+an oceanic staircase to understanding nature.
+
+\section{Numerical Simulations}
+
+A more fundamental setup of this natural mechanism is sheared thermal convection.
+Many processes in nature can be based on the interaction of heat and momentum
+transfer and therefore the correlation of buoyancy and shear in a flow. Direct
+numerical simulations were performed with our second-order finite-difference
+code \cite{poe15c} using the following three-dimensional non-dimensional
+Navier-Stokes equations with the Boussinesq approximation on a staggered grid:
+
+\begin{equation} %NS equation
+\frac{\partial \boldsymbol{u}}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \boldsymbol{u} =-\bm{\nabla} P + \left(\frac{Pr}{Ra} \right)^{1/2} \nabla^2\boldsymbol{u}+\theta \hat{z}, 
+\label{eqn:NS}
+\end{equation}
+
+\begin{equation} %NS equation
+\bm{\nabla} \bm{\cdot} \boldsymbol{u} =0,
+\label{eqn:div}
+\end{equation}
+
+\begin{equation} %Temp equation
+\frac{\partial \theta}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \theta = \frac{1}{(Pr Ra)^{1/2}} \nabla ^2 \theta.
+\label{eqn:temp} \\[8pt]
+\end{equation}
+
+We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with streamwise, spanwise and wallnormal components. $ \theta $ is the non-dimensional temperature ranging from $ 0 \leq \theta \leq 1 $. The simulations are performed in a computational box with periodic boundary conditions in streamwise and spanwise directions and confined by a heated plate below and a cooled plate on top of the flow. The shearing of the flow is implemented by a Couette flow setting where both top and bottom plates of the flow are moved in opposite directions with the speed $ u_w $ keeping the average bulk velocity at zero and therefore minimizing dissipation errors. The size of the flow field is ($ L_x \times L_y \times L_z $) = ($ 9\pi h \times 4\pi h \times h $) using a grid of ($ n_x \times n_y \times n_z $) = ($ 6912 \times 3456 \times 384 $) which is homogeneously distributed in the streamwise and spanwise directions and clustered with an error-function $ \eta(\xi)=erf(2\xi)/erf(2) $ in wallnormal direction.
+
+Our open sourced finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using a MPI, OpenMP and CUDA Fortran hybrid implementation optimized to run and solve large flow fields.
+
+For this visualization showcase, data from Blass et al. was used \cite{bla18}, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number (Eqn. \ref{eqn:Ra}), and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number (Eqn. \ref{eqn:Re}), while keeping the Prandtl number (Eqn. \ref{eqn:Pr}), which is the ratio of thermal and viscous viscosity of a fluid, at unity. The equations read:
+
+\begin{equation} %Ra
+Ra= \frac{\beta gh^3\Delta T}{\kappa\nu}, 
+\label{eqn:Ra} \\[8pt]
+\end{equation}
+
+\begin{equation} %Re_w
+Re_w= \frac{hu_w}{\nu},
+\label{eqn:Re} \\[8pt]
+\end{equation}
+
+\begin{equation} %Pr
+Pr= \frac{\nu}{\kappa},
+\label{eqn:Pr} \\[8pt]
+\end{equation}
+
+
+where $ \beta $ is the thermal expansion coefficient of the fluid, $ g $ the
+gravitational acceleration, $ \kappa $ the thermal diffusivity, $ \nu $ the
+kinematic viscosity of the fluid, $ h $ the distance between the plates and
+$ u_w $ the wall velocity.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{squaredoverview}% 
+	\caption{\label{fig:overview} Instantaneous snapshots of temperature fields
+of a sheared and thermally forced flow transitioning through all flow regimes
+for $ Ra=2.2 \times 10^6 $ and (a) $ Re=0 $, (b) $ Re=2000 $, (c) $ Re=3000 $, (d) $ Re=6000 $}
+\end{figure}
+
+In Fig. \ref{fig:overview} we present instantaneous snapshots of temperature
+fields in different flow regimes. It can be observed that the flow passes from a
+thermally dominated regime with large plumes (Fig. \ref{fig:overview}a) into a
+regime where the mechanical forcing is dominant. Here, large-scale meandering
+structures can be observed (Fig. \ref{fig:overview}d). To transition between the
+regimes, the flow has to pass a transitional stage, in which the thermal plumes
+get stretched into large streaks (Fig. \ref{fig:overview}b). If the shearing is
+further increased, these streaks become instable and start meandering into the
+final flow state (Fig. \ref{fig:overview}c).
+
+In turbulent flows it is very important to research how certain characteristic
+parameters are influenced by the flow. Changing flow structures might have a
+supporting effect or may disrupt a previously transport-favorable flow situation. 
+In thermal convection, such parameter is the heat transfer, non-dimensionally
+defined through the Nusselt number:
+
+\begin{equation} %Nusselt equation
+Nu= \frac{Qh}{\kappa \Delta \theta}
+\label{eqn:nusselt} \\[8pt]
+\end{equation} 
+
+
+Here, $ Q $ is the total vertical heat flux. In pure thermal convection, also called Rayleigh-B\'enard
+convection, the scaling between $ Ra $ and $ Nu $ has been a vital base for many
+studies on their pursuit towards the so called ultimate regime, where the boundary
+layers become turbulent and the $ Nu-Ra $ scaling changes. In the present study
+from Blass et al. \cite{bla18} this was continued by implementing a wall
+shearing to the previously pure thermally driven flow to research if the expected
+ultimate $ Nu-Ra $ scaling can be achieved this way. As previously observed in
+Fig. \ref{fig:overview}, the amount of imposed mechanical forcing is a key factor
+for the emergence of various large-scale structures. These structures are then a
+vital tool to study the behaviour of the heat in the system. 
+\newline
+
+The mesh used in our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
+The temperature scalar field stored as \it{float32} \rm takes 36Gb of memory, an
+overwhelming size to handle on a normal desktop. Using different parallel programming
+paradigms has enabled us to provide an engaging environment
+to promote interactive tuning of visualization options and high productivity for movie
+generation. We use ParaView v5.5.2, a world-class, open-source, multi-platform data analysis and
+visualization application installed on Piz Daint. Piz Daint, a hybrid Cray XC40/XC50 system,
+is the flagship supercomputer of the Swiss National HPC service. We have deployed
+and tested several solutions within ParaView where parallelism is expressed
+at different degrees: data-parallel visualization pipelines with GPU-based renderings,
+or multi-threaded parallelism for software renderings.
+
+\section{Volume rendering libraries and setup}
+
+Visualization of 3D scalar fields is a very mature field. Many techniques are
+available to get some sense of the 3D nature of the data, and its variations
+through the volume. Surface-based renderings with isosurface thresholds or
+slicing planes haved a great appeal in that they are easy to use, but volumetric
+renderings, first made popular in medical applications, are also a great fit for
+scalar visualizations, especially in the realm of time-dependent outputs.
+
+ParaView's "Smart" VolumeMapper is an image mapper
+that will delegate to a specific volume mapper based on rendering parameters and
+available hardware. It is a convenient
+wrapper to test multiple options. The largest partition of the Piz Daint supercomputer
+nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 Gb RAM) and one NVIDIA
+Tesla P100 GPU (16 Gb RAM), so our preferred rendering mode will be the GPU ray
+casting method;
+Alternatively, the vtkFixedPointVolumeRayCastMapper can be used, but it is of
+less interest in the use case of movie production. We aim to test ParaView's GPU
+ray casting implementation, against an NVIDIA-developped custom library called
+IndeX, and against a CPU-only solution, to give a valid option to users of
+supercomputers not equipped with GPUs.
+Our performance evaluation is based on ParaView's benchmarking Python source
+code\footnote{source code found in ./Wrapping/Python/paraview/benchmark/}.
+\newline
+For all methods used, we have ignored disk-based I/O costs. There is often quite
+a bit of variability when running on a large distributed file system shared by
+hundreds of users. Our motivations are rendering-centric, and two-fold:
+evaluate the memory cost and resources (CPU, GPU) required to get a first image
+on the screen, and see if color/opacity transfer
+function editing, as well as other image tuning can be done in real time, using
+any of the three methods proposed. In the evaluation of rendering costs, ParaView's
+benchmark code does a careful management of double buffering, saving images from
+the back buffer to bypass driver optimizations.
+
+In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
+relaxing the need to have a server-side X-Windows server running on the compute node.
+This enables offscreen rendering with GPU acceleration. We note however that although
+the GPUs provide phenomenal compute power, they are limited by the available memory,
+16Gb in our case. For our simulations outputs, we are forced to use data-parallel
+pipelines on multiple nodes to use the aggregate memory of the different GPUs.
+\newline
+Our third option, however, uses OSPRay and offscreen rendering but does not suffer
+from a memory hard limit. Compute nodes are easily and often found with large memory
+banks. We use Piz Daint's high memory nodes with 128 Gb of RAM, where our mesh of
+over 9 billion voxels can be rendered easily on a single node.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{fig2}% 
+	\caption{\label{fig:gpucloseup} Volume renderings of temperature with ParaView's
+Smart Shader (left), and with NVIDIA IndeX (right)}
+\end{figure}
+
+\subsection{ParaView's GPU Ray Casting} \label{smart}
+
+ParaView's most efficient mapper - if the GPU hardware supports it - is a volume
+mapper that performs ray casting on the GPU using fragment programs. Care must
+be taken when evaluating and comparing the different approaches. We highlight the
+fact that in this preferred mode, Paraview converts the 32-bit float data to 16-bit
+integer. In Fig. \ref{fig:gpucloseup}(left), we note very small differences of illumination with the
+NVIDIA IndeX-rendered image at full 32-bit resolution,
+but no degradation due to down-converted data.
+
+\subsection{NVIDIA IndeX} \label{index}
+
+NVIDIA IndeX\cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developped to enable
+the visualization of massive datasets. NVIDIA has worked in tandem with Kitware to
+bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
+of a close partnership between the Swiss National Supercomputing Center (CSCS),
+and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
+plugin v2.1 with the core library NVIDIA IndeX 1.5 (build 299900.2384). In
+Fig. \ref{fig:gpucloseup}(right), an NVIDIA IndeX rendering is done with identical
+color and opacity transfer functions as used in \ref{smart}.
+Small differences can be accounted for a non uniform interpretation of the sampling rates
+for the scalar opacity unit distance as coded in the three proposed implementations.
+
+\subsection{Intel OSPRay}
+
+OSPRay\cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
+shading effects, large models and non-polygonal primitives. OSPRay can distributes 
+"bricks" of data as well as "tiles" of the framebuffer, although in our current
+implementation, we only use brick subdivisions. The Texas Advanced Computing Center
+has developed a Paraview plugin which enables us to test the possibility of
+using a ray-tracing based rendering engine for volumetric rendering. This is
+the best solution for clusters where no GPU hardware is available.
+
+In the case of OSPRay, we rely on another parallel computing paradigm.
+The emphasis is no more on data parallism, but rather on multi-threaded execution.
+A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
+OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
+OSPRay v1.6.1 library to provide a very efficient multi-threaded execution path
+taking advantage of Piz Daint's alternate partition of compute nodes. These nodes
+are built with two Intel Broadwell CPUs (2x18 cores and 64/128 Gb RAM). We run
+ParaView with SLURM's option "--cpus-per-task=72 --ntasks-per-core=2", effectively
+taking full advantage of the multi-threading exposed by the LLVM and OSPRay libraries. 
+
+\subsection{Parallel Image Compositing}
+
+ParaView's default mode of parallel computing is to use data-parallel distribution,
+whereby sub-pieces of a data grid are processed through identical visualization
+pipelines. To combine the individual framebuffers of each computing nodes,
+Paraview uses Sandia National Laboratory's IceT\cite{Moreland2011} compositing
+library. We use it in its default mode of operation doing sort-last compositing
+for desktop image delivery. We note here that NVIDIA's IndeX uses a propriatary
+compositing library, so for the IndeX tests only, we disable ParaView's default
+image compositor.
+
+\section{Volume rendering of the thermal convection}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{fig2montage}% 
+	\caption{\label{fig:shadings} Volume rendering with shading based on gradient
+estimation (left), and with OSPRay-enabled shadows (right)}
+\end{figure}
+
+In visualizing the temperature field, we seek to highlight the turbulence which
+is best shown by clearly differentiating between cold and hot regions to see how
+they interact with each other. Our movie animation shows an initial phase where
+region of blue tint is superposed on top of the hotter region. Plumes emerging
+from the bottom and mixing into the cold regions highlight this phenomenom.
+
+\subsection{Visual effects}
+
+When presented with multiple visualizations including different illumination and
+shading, the scientists actually preferred the renderings which emphasize the
+amorphous nature of the field data. As can be seen in Fig. \ref{fig:shadings},
+shading based on gradient estimation offers little improvement because our data
+does not have strong gradients, and the use of shadows which at first might seem
+more appealing, produces images with a strong \it{surface-like} \rm look, which
+we discarded upon further analysis.
+
+\subsection{Overall costs}
+
+Volumetric rendering at this scale of grid has a non significant cost which we
+briefly document here. Creating the first frame after data has been read in memory,
+ i.e. the startup cost has a great impact in having users adopt a particular implementation.
+In a \it{post-hoc} \rm visualization, data would be read from disk; in an \it{in-situ} \rm
+scenario, data might have to be converted to VTK data structures. Thus, we count time
+from the moment ParaView has collected all the data, and we toggle the volumetric
+rendering options which trigger the build of internal structures for ray-tracing.
+If memory costs are substantial, more nodes, and/or more GPUs will be required, increasing the
+run-time cost of the visualization. Our results are of great interest; we were
+pleasantly surprised to find out that the OSPRay based implementation, using a
+single node and 72 execution threads makes the first image at a cost of roughly 7-8 seconds. 
+After the first frame, interactive renderings are done in sub-second times,
+color and opacity transfer functions editing is also interactive and very intuitive.
+ We ran all tests on different combinations of nodes, at HD (1920x1080 pixels) and
+4K UDH (3840x2160 pixels) resolutions.
+
+\subsection{Benchmarking tests}
+
+We have done this, and this, to evaluate the performance.
+
+
+
+Table \ref{tab:example-tab} summarizes our experiences. In the first column, we
+show the startup cost computed from the time all the data has been read to disk
+into a partitioned VTKImageData grid, until the first frame is seen in volumetric
+rendering mode. In the next column, we show average rendering times for all subsequent
+rendering for 300 frames. The memory cost per node is then shown in the last column.
+
+\begin{table}[htb]
+  \centering
+  \caption{
+    Startup time for the first frame, all other frames, and memory costs per node.
+  }
+  \label{tab:example-tab}
+
+  \begin{tabular}{lccc}
+    \hline
+    Method & Startup & Subsequent frames & memory \\
+    \hline
+    "Smart" Mapper 2GPUs & 0.0 &  0.0 &  10.0 \\
+    "Smart" Mapper 4GPUs & 0.5 &  3.8 &  5.1 \\
+    NVIDIA IndeX 4GPUs & 1.0 &  5.1 & 0.2 \\
+    OSPRay 1 node & 1.5 &  4.0 &  -4.7 \\
+    OSPRay 2 nodes & 2.0 &  0.4 &  -9.6 \\
+    OSPRay 4 nodes & 2.5 & -5.6 & -14.5 \\
+    \hline
+
+  \end{tabular}
+\end{table}
+
+\section{Summary and conclusion}
+
+Based on the benchmark results and visual preferences we adopted the implementation
+featuring the XYZ library, because justify, justify...
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+\section*{Acknowledgments}
+
+Alexander Blass conducted his simulation runs at the Swiss National Supercomputing Center, under compute allocations s713 and s802. The authors thank the ParaView development team at Kitware, USA, for fruitfull discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting.
+
+%% Use the elsarticle-num bibliography style.
+\section*{References}
+\bibliographystyle{elsarticle-num} 
+\bibliography{bibliography-template}
+
+\end{document}
+\endinput
