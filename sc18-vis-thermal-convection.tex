@@ -237,7 +237,7 @@ or multi-threaded parallelism for software renderings.
 Visualization of 3D scalar fields is a very mature field. Many techniques are
 available to get some sense of the 3D nature of the data, and its variations
 through the volume. Surface-based renderings with isosurface thresholds or
-slicing planes haved a great appeal in that they are easy to use, but volumetric
+slicing planes have a great appeal in that they are easy to use, but volumetric
 renderings, first made popular in medical applications, are also a great fit for
 scalar visualizations, especially in the realm of time-dependent outputs.
 
@@ -246,8 +246,7 @@ that will delegate to a specific volume mapper based on rendering parameters and
 available hardware. It is a convenient
 wrapper to test multiple options. The largest partition of the Piz Daint supercomputer
 nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 Gb RAM) and one NVIDIA
-Tesla P100 GPU (16 Gb RAM), so our preferred rendering mode will be the GPU ray
-casting method;
+Tesla P100 GPU (16 Gb RAM), so priority is to evaluate the GPU-based implementations.
 Alternatively, the vtkFixedPointVolumeRayCastMapper can be used, but it is of
 less interest in the use case of movie production. We aim to test ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
@@ -319,7 +318,7 @@ using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
 In the case of OSPRay, we rely on another parallel computing paradigm.
-The emphasis is no more on data parallism, but rather on multi-threaded execution.
+The emphasis is no more on data parallelism, but rather on multi-threaded execution.
 A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
 OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
 OSPRay v1.6.1 library to provide a very efficient multi-threaded execution path
