@@ -244,11 +244,13 @@ scalar visualizations, especially in the realm of time-dependent outputs.
 ParaView's "Smart" VolumeMapper is an image mapper
 that will delegate to a specific volume mapper based on rendering parameters and
 available hardware. It is a convenient
-wrapper to test multiple options. The largest partition of the Piz Daint supercomputer
+wrapper to test multiple options.
+\newline
+The largest partition of the Piz Daint supercomputer
 nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 Gb RAM) and one NVIDIA
 Tesla P100 GPU (16 Gb RAM), so priority is to evaluate the GPU-based implementations.
-Alternatively, the vtkFixedPointVolumeRayCastMapper can be used, but it is of
-less interest in the use case of movie production. We aim to test ParaView's GPU
+ParaView "Ray Cast Only" mode is also available but we have found its performance far
+below the other options, and we discarded its use. We aim to test ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
 IndeX, and against a CPU-only solution, to give a valid option to users of
 supercomputers not equipped with GPUs.
@@ -261,15 +263,15 @@ hundreds of users. Our motivations are rendering-centric, and two-fold:
 evaluate the memory cost and resources (CPU, GPU) required to get a first image
 on the screen, and see if color/opacity transfer
 function editing, as well as other image tuning can be done in real time, using
-any of the three methods proposed. In the evaluation of rendering costs, ParaView's
-benchmark code does a careful management of double buffering, saving images from
-the back buffer to bypass driver optimizations.
+any of the three methods proposed. In the evaluation of performance costs, ParaView's
+benchmark code enables fully automatized testing with a careful management of
+double buffering, saving images from the back buffer to bypass driver optimizations.
 
 In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
 relaxing the need to have a server-side X-Windows server running on the compute node.
-This enables offscreen rendering with GPU acceleration. We note however that although
+This enables headless, offscreen rendering with GPU acceleration. We note however that although
 the GPUs provide phenomenal compute power, they are limited by the available memory,
-16Gb in our case. For our simulations outputs, we are forced to use data-parallel
+16Gb NVIDIA's Pascal GPUs. For the size of our simulations outputs, we are actually forced to use data-parallel
 pipelines on multiple nodes to use the aggregate memory of the different GPUs.
 \newline
 Our third option, however, uses OSPRay and offscreen rendering but does not suffer
@@ -290,7 +292,7 @@ ParaView's most efficient mapper - if the GPU hardware supports it - is a volume
 mapper that performs ray casting on the GPU using fragment programs. Care must
 be taken when evaluating and comparing the different approaches. We highlight the
 fact that in this preferred mode, Paraview converts the 32-bit float data to 16-bit
-integer. In Fig. \ref{fig:gpucloseup}(left), we note very small differences of illumination with the
+integer. In Fig. \ref{fig:gpucloseup} (left), we note very small differences of illumination with the
 NVIDIA IndeX-rendered image at full 32-bit resolution,
 but no degradation due to down-converted data.
 
@@ -302,7 +304,7 @@ bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS),
 and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
 plugin v2.1 with the core library NVIDIA IndeX 1.5 (build 299900.2384). In
-Fig. \ref{fig:gpucloseup}(right), an NVIDIA IndeX rendering is done with identical
+Fig. \ref{fig:gpucloseup} (right), an NVIDIA IndeX rendering is done with identical
 color and opacity transfer functions as used in \ref{smart}.
 Small differences can be accounted for a non uniform interpretation of the sampling rates
 for the scalar opacity unit distance as coded in the three proposed implementations.
@@ -317,7 +319,7 @@ has developed a Paraview plugin which enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
-In the case of OSPRay, we rely on another parallel computing paradigm.
+In the case of OSPRay, we rely on a different parallel computing paradigm.
 The emphasis is no more on data parallelism, but rather on multi-threaded execution.
 A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
 OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
@@ -340,16 +342,16 @@ image compositor.
 
 \section{Volume rendering of the thermal convection}
 
-\begin{figure}
+\begin{figure}[!hbt]
 	\centering
-	\includegraphics[width=\linewidth]{fig2montage}% 
-	\caption{\label{fig:shadings} Volume rendering with shading based on gradient
-estimation (left), and with OSPRay-enabled shadows (right)}
+	\includegraphics[width=\linewidth]{zoom0000}% 
+	\caption{\label{fig:zoom} Example of a color and opacity transfer functions to highlight hot and cold plumes.}
 \end{figure}
+
 
 In visualizing the temperature field, we seek to highlight the turbulence which
 is best shown by clearly differentiating between cold and hot regions to see how
-they interact with each other. Our movie animation shows an initial phase where
+they interact with each other, as seen in Fig. \ref{fig:zoom}. Our movie animation shows an initial phase where
 region of blue tint is superposed on top of the hotter region. Plumes emerging
 from the bottom and mixing into the cold regions highlight this phenomenon.
 
@@ -363,57 +365,66 @@ does not have strong gradients, and the use of shadows which at first might seem
 more appealing, produces images with a strong \it{surface-like} \rm look, which
 we discarded upon further analysis.
 
-\subsection{Overall costs}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{fig2montage}% 
+	\caption{\label{fig:shadings} Volume rendering with shading based on gradient
+estimation (left), and with OSPRay-enabled shadows (right)}
+\end{figure}
+
+
+\subsection{Rendering costs}
 
 Volumetric rendering at this scale of grid has a non significant cost which we
 briefly document here. Creating the first frame after data has been read in memory,
  i.e. the startup cost has a great impact in having users adopt a particular implementation.
 In a \it{post-hoc} \rm visualization, data would be read from disk; in an \it{in-situ} \rm
-scenario, data might have to be converted to VTK data structures. Thus, we count time
-from the moment ParaView has collected all the data, and we toggle the volumetric
-rendering options which trigger the build of internal structures for ray-tracing.
-If memory costs are substantial, more nodes, and/or more GPUs will be required, increasing the
-run-time cost of the visualization. We were
-pleasantly surprised to find out that the OSPRay based implementation, using a
-single node and 72 execution threads makes the first image at a cost of roughly 7-8 seconds. 
-After the first frame, interactive renderings are done in sub-second times,
-color and opacity transfer functions editing is also interactive and very intuitive.
- We ran all tests on different combinations of nodes, at HD (1920x1080 pixels) and
-4K UDH (3840x2160 pixels) resolutions.
-
-\subsection{Benchmarking tests}
-
-We have done this, and this, to evaluate the performance.
-
-
-
-Table \ref{tab:example-tab} summarizes our experiences. In the first column, we
-show the startup cost computed from the time all the data has been read to disk
-into a partitioned VTKImageData grid, until the first frame is seen in volumetric
-rendering mode. In the next column, we show average rendering times for all subsequent
-rendering for 300 frames. The memory cost per node is then shown in the last column.
+scenario, data might have to be converted to VTK data structures. Thus, we measure performance
+after the time ParaView has collected all the data and created a bounding-box representation. This startup cost for the first image is also of paramount importance in a movie-making scenario, where data are read from disk, a single image is computed, and the whole visualization pipeline and hardware resources are flushed to get the next timestep.
+\newline
+We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options are enabled, triggering the building of internal structures until the first frame appears.
+To further evaluate the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e. 2.28G voxels ($ 1730 \times 3455 \times 384 $).
 
 \begin{table}[htb]
   \centering
   \caption{
-    Startup time for the first frame, all other frames, and memory costs per node.
+    Initialization time for the first image and memory costs on one node.
   }
-  \label{tab:example-tab}
+  \label{tab:firstframe-tab}
 
   \begin{tabular}{lccc}
     \hline
-    Method & Startup & Subsequent frames & memory \\
+    Rendering library & Startup & pvserver task\\
     \hline
-    "Smart" Mapper 2GPUs & 0.0 &  0.0 &  10.0 \\
-    "Smart" Mapper 4GPUs & 0.5 &  3.8 &  5.1 \\
-    NVIDIA IndeX 4GPUs & 1.0 &  5.1 & 0.2 \\
-    OSPRay 1 node & 1.5 &  4.0 &  -4.7 \\
-    OSPRay 2 nodes & 2.0 &  0.4 &  -9.6 \\
-    OSPRay 4 nodes & 2.5 & -5.6 & -14.5 \\
+    OSPRay & 2.1 secs &  27.6Gb \\
+    ParaView GPU Mapper & 7.7 secs &  25.8Gb \\
+    NVIDIA IndeX & 15.7 secs &  21.1Gb\\
     \hline
 
   \end{tabular}
 \end{table}
+
+The high initial setup cost incurred with the NVIDIA IndeX library is due to higher volume transfer between CPU and GPU, a cost that increases further when in parallel mode, as the current
+implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress \footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
+\newline
+If memory costs are substantial, more nodes, and/or more GPUs will be required,
+increasing the run-time cost of the visualization. Our data domain is quite large
+indeed, and we are not able to load a half-size domain on a single node equipped
+with GPUs. Indeed, the 64Gb RAM on the node is the hard limitation. On the other hand,
+the nodes on the multi-core partition of Piz daint with dual-Xeon chips and 128Gb of RAM can accomodate the data, in quarter-size,
+half-size, or even full-size domain. We were able to measure the startup cost for
+the first image. We are pleased to report that the OSPRay based implementation,
+using a single compute node and 72 execution threads has linear costs for
+the startup image. We have tested the quarter-size, half-size and the full domain
+and we report the delivery of the first image in 2.1, 4.0, and 8.0 seconds, respectively. the associated cost in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respesctively.
+ 
+After the first frame has been built, our experience is that renderings
+are done at interactive speed with all three libraries tested.
+Color and opacity transfer functions editing is also interactive and very intuitive.
+ We ran all tests on different combinations of nodes, at HD (1920x1080 pixels) and
+4K UDH (3840x2160 pixels) resolutions.
+
+\subsection{Parallel rendering costs}
 
 \section{Summary and conclusion}
 
