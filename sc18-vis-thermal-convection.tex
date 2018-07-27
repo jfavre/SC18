@@ -240,7 +240,7 @@ through the volume. Surface-based renderings with isosurface thresholds or
 slicing planes have a great appeal in that they are easy to use, but volumetric
 renderings, first made popular in medical applications, are also a great fit for
 scalar visualizations, especially in the realm of time-dependent outputs.
-
+\newline
 ParaView's "Smart" VolumeMapper is an image mapper
 that will delegate to a specific volume mapper based on rendering parameters and
 available hardware. It is a convenient
@@ -248,7 +248,7 @@ wrapper to test multiple options.
 \newline
 The largest partition of the Piz Daint supercomputer
 nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 Gb RAM) and one NVIDIA
-Tesla P100 GPU (16 Gb RAM), so priority is to evaluate the GPU-based implementations.
+Tesla P100 GPU (16 Gb RAM), so our priority is to evaluate the GPU-based implementations.
 ParaView "Ray Cast Only" mode is also available but we have found its performance far
 below the other options, and we discarded its use. We aim to test ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
@@ -270,11 +270,11 @@ double buffering, saving images from the back buffer to bypass driver optimizati
 In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
 relaxing the need to have a server-side X-Windows server running on the compute node.
 This enables headless, offscreen rendering with GPU acceleration. We note however that although
-the GPUs provide phenomenal compute power, they are limited by the available memory,
-16Gb NVIDIA's Pascal GPUs. For the size of our simulations outputs, we are actually forced to use data-parallel
+the GPUs provide phenomenal compute power, they are limited by the available memory
+(16Gb on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs, we are actually forced to use data-parallel
 pipelines on multiple nodes to use the aggregate memory of the different GPUs.
 \newline
-Our third option, however, uses OSPRay and offscreen rendering but does not suffer
+Our third option, however, uses OSPRay and software rendering and does not suffer
 from a memory hard limit. Compute nodes are easily and often found with large memory
 banks. We use Piz Daint's high memory nodes with 128 Gb of RAM, where our mesh of
 over 9 billion voxels can be rendered easily on a single node.
@@ -373,22 +373,22 @@ estimation (left), and with OSPRay-enabled shadows (right)}
 \end{figure}
 
 
-\subsection{Rendering costs}
+\subsection{Rendering costs on a single node}
 
 Volumetric rendering at this scale of grid has a non significant cost which we
 briefly document here. Creating the first frame after data has been read in memory,
  i.e. the startup cost has a great impact in having users adopt a particular implementation.
 In a \it{post-hoc} \rm visualization, data would be read from disk; in an \it{in-situ} \rm
 scenario, data might have to be converted to VTK data structures. Thus, we measure performance
-after the time ParaView has collected all the data and created a bounding-box representation. This startup cost for the first image is also of paramount importance in a movie-making scenario, where data are read from disk, a single image is computed, and the whole visualization pipeline and hardware resources are flushed to get the next timestep.
+after the time ParaView has collected all the data and created a bounding-box representation. This startup cost for the first image is also of paramount importance in a movie-making scenario, where data are read from disk, a single image is computed, and the whole visualization pipeline and hardware resources are flushed to visualize the next timestep.
 \newline
 We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options are enabled, triggering the building of internal structures until the first frame appears.
-To further evaluate the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e. 2.28G voxels ($ 1730 \times 3455 \times 384 $).
+To be able to measure the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e. 2.28G voxels ($ 1730 \times 3455 \times 384 $).
 
 \begin{table}[htb]
   \centering
   \caption{
-    Initialization time for the first image and memory costs on one node.
+    Initialization and memory costs for a quarter-size domain on one node.
   }
   \label{tab:firstframe-tab}
 
@@ -405,26 +405,28 @@ To further evaluate the memory cost on a single node, we restricted our test sam
 \end{table}
 
 The high initial setup cost incurred with the NVIDIA IndeX library is due to higher volume transfer between CPU and GPU, a cost that increases further when in parallel mode, as the current
-implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress \footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
+implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress\footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
 \newline
 If memory costs are substantial, more nodes, and/or more GPUs will be required,
 increasing the run-time cost of the visualization. Our data domain is quite large
-indeed, and we are not able to load a half-size domain on a single node equipped
-with GPUs. Indeed, the 64Gb RAM on the node is the hard limitation. On the other hand,
-the nodes on the multi-core partition of Piz daint with dual-Xeon chips and 128Gb of RAM can accomodate the data, in quarter-size,
-half-size, or even full-size domain. We were able to measure the startup cost for
-the first image. We are pleased to report that the OSPRay based implementation,
-using a single compute node and 72 execution threads has linear costs for
-the startup image. We have tested the quarter-size, half-size and the full domain
-and we report the delivery of the first image in 2.1, 4.0, and 8.0 seconds, respectively. the associated cost in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respesctively.
+indeed, and wew are not able to load a half-size domain on a single GPU node. Indeed, both
+the 64Gb RAM on the node and the 16Gb RAM on the GPU are hard limitations. The OSPRay-based software rendering is one way to alleviate this problem. We can load the full size
+domain on a single node of  the multi-core partition of Piz Daint with dual-Xeon
+chips and 128Gb of RAM. We measured again the startup cost for the first image
+using 72 execution threads and found them to increase linearly with grid dimensions.
+We tested the quarter-size, half-size and the full domain and report the delivery
+of the first image in 2.1, 4.0, and 8.0 seconds, respectively. The associated cost
+in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respectively.
  
 After the first frame has been built, our experience is that renderings
 are done at interactive speed with all three libraries tested.
 Color and opacity transfer functions editing is also interactive and very intuitive.
- We ran all tests on different combinations of nodes, at HD (1920x1080 pixels) and
-4K UDH (3840x2160 pixels) resolutions.
+ We ran scripted navigation scenarios through a static domain loaded in memory
+at HD (1920x1080 pixels) and 4K UDH (3840x2160 pixels) resolutions. We report
+the average cost per image for 300 rendered images, interacting with the volume
+at different orientations and scales.
 
-\subsection{Parallel rendering costs}
+\subsection{Rendering the full domain in parallel}
 
 \section{Summary and conclusion}
 
