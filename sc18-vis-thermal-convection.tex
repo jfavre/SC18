@@ -422,16 +422,69 @@ After the first frame has been built, our experience is that renderings
 are done at interactive speed with all three libraries tested.
 Color and opacity transfer functions editing is also interactive and very intuitive.
  We ran scripted navigation scenarios through a static domain loaded in memory
-at HD (1920x1080 pixels) and 4K UDH (3840x2160 pixels) resolutions. We report
-the average cost per image for 300 rendered images, interacting with the volume
-at different orientations and scales.
+at HD (1920x1080 pixels) and 4K UDH (3840x2160 pixels) resolutions.
 
 \subsection{Rendering the full domain in parallel}
 
+We have discussed the fact that the two GPU-based rendering solutions
+are limited by the available GPU memory. A nearly 9G voxels dataset just will
+not fit on a single GPU. To enable our visualization, we must use a parallel 
+set of nodes. We measure again the initial cost for the first image
+(after all I/O has been done), and also the frame rate achieved in a scripted
+animation loop. Table \ref{tab:parallelgpu-tab} summarizes our findings. As noted earlier,
+the NVIDIA IndeX library sents the full 32-bit resolution data to the GPU. This
+leads to the application crashing when using 4 nodes only. Thus, a minimum
+allocation must contain 8 nodes/GPUs. Conservatively, we may say that 1 giga-voxel
+per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA IndeX library.
+
+\begin{table}[htb]
+  \centering
+  \caption{
+    Initial cost for the first frame and frames/sec for the full size domain
+  }
+  \label{tab:parallelgpu-tab}
+
+  \begin{tabular}{lccc}
+    \hline
+    Rendering library & Startup (secs) & frames/sec\\
+    \hline
+    ParaView 4 GPU Mapper & 6.3 secs &  0.19 \\
+    ParaView 8 GPU Mapper & 3.2 secs &  0.30 \\
+    NVIDIA 4 IndeX & n/a &  n/a\\
+    NVIDIA 8 IndeX & 49 secs &  1.48\\
+    \hline
+
+  \end{tabular}
+\end{table}
+
+Finally, we note that with 8 GPUs, the NVIDIA IndeX implementation offers a faster
+frame/sec rate. The startup cost however remains a big bottleneck. Discussion with
+the NVIDIA developers are on-going and our hopes is that this will be much improved
+in future versions of the SDK.
+
 \section{Summary and conclusion}
 
-Based on the benchmark results and visual preferences we adopted the implementation
-featuring the XYZ library, because justify, justify...
+We have discussed three implementations of volume rendering for a thermal convection
+simulation output of substantial size. Our time-dependent output is stored as a
+\it{float32} \rm array of 36G bytes per timestep. This is a non-trivial size for the most common
+GPUs. This leaves the scientist with two options: 1) Use a data-parallel visualization
+application with GPU-assisted rendering, or 2) use a \it{software-only} \rm
+visualization environment which can fit on compute nodes where large memory
+banks are easily found. Our choice was to deploy a single application, the open-source
+ParaView, thanks to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
+driven by fully automatized python scripts and a benchmarking suite of tools made
+available by ParaView itself enabled us to confront all possible implementations with reduced variability.
+\newline
+We tested two GPU-based rendering options. We first used ParaView's native volume rendering
+filter which has proved to offer the best compromise between startup time, and interactive performance; We also tested an alternative solution based on a new library in current development by NVIDIA. In our current setup, the IndeX library offers superior interactive rendering, however at non negligible initialization costs.
+\newline
+We evaluated an implementation of volume rendering provided by the Intel OSPRay library,
+a software-based framework which can take remarkable advantage of a multi-threaded
+execution layer. This also fitted very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
+
+Our emphasis in creating the scientific visualization shown in the accompanying video was two-fold. Have an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
+deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and we achieved high productivity with a data-parallel execution path. Movie production was done on small subsets of GPU nodes with ParaView's native volume renderer.
+
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
