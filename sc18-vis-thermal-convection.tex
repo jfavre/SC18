@@ -12,7 +12,7 @@
 %% SC SciVis Showcase submissions should use the elsarticle document class
 %% with options `final,5p,times,twocolumn`.
 \documentclass[final,5p,times,twocolumn]{elsarticle}
-
+\hyphenation{ParaView}
 %% The amssymb package provides various useful mathematical symbols
 \usepackage{amssymb}
 %% The amsthm package provides extended theorem environments
@@ -75,10 +75,10 @@ University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 \begin{abstract}
 
 We present visualizations of sheared thermal convection in large scale
-wall-bounded turbulent flow simulations. The visualization is based on volume
+wall-bounded turbulent flow simulations. The visualizations are based on volume
 renderings of the temperature field. To address the needs of supercomputer users
 with different hardware and software resources, we evaluate different implementations
-supported in the ParaView\cite{Ahrens2005} environment: two GPU-based solutions
+supported in the ParaView \cite{Ahrens2005} environment: two GPU-based solutions
 with Kitware's native volume mapper or NVIDIA's IndeX library, and a software-only
 OSPRay-based implementation.
 
@@ -196,18 +196,6 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 \label{eqn:nusselt} \\[8pt]
 \end{equation} 
 
-
-%Here, $ Q $ is the total vertical heat flux. In pure thermal convection, also called Rayleigh-B\'enard
-%convection, the scaling between $ Ra $ and $ Nu $ has been a vital base for many
-%studies on their pursuit towards the so called ultimate regime, where the boundary
-%layers become turbulent and the $ Nu-Ra $ scaling changes. In the present study
-%from Blass et al. \cite{bla18} this was continued by implementing a wall
-%shearing to the previously pure thermally driven flow to research if the expected
-%ultimate $ Nu-Ra $ scaling can be achieved this way. As previously observed in
-%Fig. \ref{fig:overview}, the amount of imposed shear is a key factor
-%for the emergence of various large-scale structures. These structures are then a
-%vital tool to study the behavior of the heat in the system. 
-
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and dynamic interaction of turbulent structures with each other. 
 
 To have the chance to observe the flow while evolving and transitioning through different regimes is a great chance not only to statically observe different flow states at fixed locations in space, but to actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
@@ -221,7 +209,7 @@ To have the chance to observe the flow while evolving and transitioning through 
 It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations presented in this paper allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
 
 The mesh used in our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
-The temperature scalar field stored as \it{float32} \rm takes 36Gb of memory, an
+The temperature scalar field stored as \it{float32} \rm takes 36 Gb of memory, an
 overwhelming size to handle on a normal desktop. Using different parallel programming
 paradigms has enabled us to provide an engaging environment
 to promote interactive tuning of visualization options and high productivity for movie
@@ -249,7 +237,7 @@ wrapper to test multiple options.
 The largest partition of the Piz Daint supercomputer
 nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 Gb RAM) and one NVIDIA
 Tesla P100 GPU (16 Gb RAM), so our priority is to evaluate the GPU-based implementations.
-ParaView "Ray Cast Only" mode is also available but we have found its performance far
+ParaView's "Ray Cast Only" mode is also available but we have found its performance far
 below the other options, and we discarded its use. We aim to test ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
 IndeX, and against a CPU-only solution, to give a valid option to users of
@@ -259,7 +247,7 @@ code\footnote{source code found in ./Wrapping/Python/paraview/benchmark/}.
 \newline
 For all methods used, we have ignored disk-based I/O costs. There is often quite
 a bit of variability when running on a large distributed file system shared by
-hundreds of users. Our motivations are rendering-centric, and two-fold:
+hundreds of users. Our motivations are rendering-centered, and two-fold:
 evaluate the memory cost and resources (CPU, GPU) required to get a first image
 on the screen, and see if color/opacity transfer
 function editing, as well as other image tuning can be done in real time, using
@@ -271,7 +259,7 @@ In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
 relaxing the need to have a server-side X-Windows server running on the compute node.
 This enables headless, offscreen rendering with GPU acceleration. We note however that although
 the GPUs provide phenomenal compute power, they are limited by the available memory
-(16Gb on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs, we are actually forced to use data-parallel
+(16 Gb on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs, we are actually forced to use data-parallel
 pipelines on multiple nodes to use the aggregate memory of the different GPUs.
 \newline
 Our third option, however, uses OSPRay and software rendering and does not suffer
@@ -298,7 +286,7 @@ but no degradation due to down-converted data.
 
 \subsection{NVIDIA IndeX} \label{index}
 
-NVIDIA IndeX\cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developed to enable
+NVIDIA IndeX \cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developed to enable
 the visualization of massive datasets. NVIDIA has worked in tandem with Kitware to
 bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS),
@@ -306,12 +294,12 @@ and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
 plugin v2.1 with the core library NVIDIA IndeX 1.5 (build 299900.2384). In
 Fig. \ref{fig:gpucloseup} (right), an NVIDIA IndeX rendering is done with identical
 color and opacity transfer functions as used in \ref{smart}.
-Small differences can be accounted for a non uniform interpretation of the sampling rates
+Small differences can be accounted for with a non uniform interpretation of the sampling rates
 for the scalar opacity unit distance as coded in the three proposed implementations.
 
 \subsection{Intel OSPRay}
 
-OSPRay\cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
+OSPRay \cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
 shading effects, large models and non-polygonal primitives. OSPRay can distributes 
 "bricks" of data as well as "tiles" of the framebuffer, although in our current
 implementation, we only use brick subdivisions. The Texas Advanced Computing Center
@@ -334,7 +322,7 @@ taking full advantage of the multi-threading exposed by the LLVM and OSPRay libr
 ParaView's default mode of parallel computing is to use data-parallel distribution,
 whereby sub-pieces of a data grid are processed through identical visualization
 pipelines. To combine the individual framebuffers of each computing nodes,
-ParaView uses Sandia National Laboratory's IceT\cite{Moreland2011} compositing
+ParaView uses Sandia National Laboratory's IceT \cite{Moreland2011} compositing
 library. We use it in its default mode of operation doing sort-last compositing
 for desktop image delivery. We note here that NVIDIA's IndeX uses a proprietary
 compositing library, so for the IndeX tests only, we disable ParaView's default
@@ -396,9 +384,9 @@ To be able to measure the memory cost on a single node, we restricted our test s
     \hline
     Rendering library & Startup & pvserver task\\
     \hline
-    OSPRay & 2.1 secs &  27.6Gb \\
-    ParaView GPU Mapper & 7.7 secs &  25.8Gb \\
-    NVIDIA IndeX & 15.7 secs &  21.1Gb\\
+    OSPRay & 2.1 secs &  27.6 Gb \\
+    ParaView GPU Mapper & 7.7 secs &  25.8 Gb \\
+    NVIDIA IndeX & 15.7 secs &  21.1 Gb\\
     \hline
 
   \end{tabular}
@@ -410,13 +398,13 @@ implementation of IndeX will trigger re-execution of the data I/O because of lar
 If memory costs are substantial, more nodes, and/or more GPUs will be required,
 increasing the run-time cost of the visualization. Our data domain is quite large
 indeed, and we are not able to load a half-size domain on a single GPU node. Indeed, both
-the 64Gb RAM on the node and the 16Gb RAM on the GPU are hard limitations. The OSPRay-based software rendering is one way to alleviate this problem. We can load the full size
+the 64 Gb RAM on the node and the 16 Gb RAM on the GPU are hard limitations. The OSPRay-based software rendering is one way to alleviate this problem. We can load the full size
 domain on a single node of  the multi-core partition of Piz Daint with dual-Xeon
-chips and 128Gb of RAM. We measured again the startup cost for the first image
+chips and 128 Gb of RAM. We measured again the startup cost for the first image
 using 72 execution threads and found them to increase linearly with grid dimensions.
 We tested the quarter-size, half-size and the full domain and report the delivery
 of the first image in 2.1, 4.0, and 8.0 seconds, respectively. The associated cost
-in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respectively.
+in RAM is also linear, at 27.6 Gb, 55.1 Gb and 110 Gb, respectively.
  
 After the first frame has been built, our experience is that renderings
 are done at interactive speed with all three libraries tested.
