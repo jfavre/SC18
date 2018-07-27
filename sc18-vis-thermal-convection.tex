@@ -206,7 +206,7 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 %ultimate $ Nu-Ra $ scaling can be achieved this way. As previously observed in
 %Fig. \ref{fig:overview}, the amount of imposed shear is a key factor
 %for the emergence of various large-scale structures. These structures are then a
-%vital tool to study the behaviour of the heat in the system. 
+%vital tool to study the behavior of the heat in the system. 
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and dynamic interaction of turbulent structures with each other. 
 
@@ -291,7 +291,7 @@ Smart Shader (left), and with NVIDIA IndeX (right)}
 ParaView's most efficient mapper - if the GPU hardware supports it - is a volume
 mapper that performs ray casting on the GPU using fragment programs. Care must
 be taken when evaluating and comparing the different approaches. We highlight the
-fact that in this preferred mode, Paraview converts the 32-bit float data to 16-bit
+fact that in this preferred mode, ParaView converts the 32-bit float data to 16-bit
 integer. In Fig. \ref{fig:gpucloseup} (left), we note very small differences of illumination with the
 NVIDIA IndeX-rendered image at full 32-bit resolution,
 but no degradation due to down-converted data.
@@ -315,7 +315,7 @@ OSPRay\cite{OSPRay} is a ray tracing framework for CPU-based rendering. It suppo
 shading effects, large models and non-polygonal primitives. OSPRay can distributes 
 "bricks" of data as well as "tiles" of the framebuffer, although in our current
 implementation, we only use brick subdivisions. The Texas Advanced Computing Center
-has developed a Paraview plugin which enables us to test the possibility of
+has developed a ParaView plugin which enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
@@ -334,9 +334,9 @@ taking full advantage of the multi-threading exposed by the LLVM and OSPRay libr
 ParaView's default mode of parallel computing is to use data-parallel distribution,
 whereby sub-pieces of a data grid are processed through identical visualization
 pipelines. To combine the individual framebuffers of each computing nodes,
-Paraview uses Sandia National Laboratory's IceT\cite{Moreland2011} compositing
+ParaView uses Sandia National Laboratory's IceT\cite{Moreland2011} compositing
 library. We use it in its default mode of operation doing sort-last compositing
-for desktop image delivery. We note here that NVIDIA's IndeX uses a propriatary
+for desktop image delivery. We note here that NVIDIA's IndeX uses a proprietary
 compositing library, so for the IndeX tests only, we disable ParaView's default
 image compositor.
 
@@ -432,7 +432,7 @@ not fit on a single GPU. To enable our visualization, we must use a parallel
 set of nodes. We measure again the initial cost for the first image
 (after all I/O has been done), and also the frame rate achieved in a scripted
 animation loop. Table \ref{tab:parallelgpu-tab} summarizes our findings. As noted earlier,
-the NVIDIA IndeX library sents the full 32-bit resolution data to the GPU. This
+the NVIDIA IndeX library sends the full 32-bit resolution data to the GPU. This
 leads to the application crashing when using 4 nodes only. Thus, a minimum
 allocation must contain 8 nodes/GPUs. Conservatively, we may say that 1 giga-voxel
 per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA IndeX library.
@@ -483,7 +483,7 @@ a software-based framework which can take remarkable advantage of a multi-thread
 execution layer. This also fitted very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
 
 Our emphasis in creating the scientific visualization shown in the accompanying video was two-fold. Have an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
-deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and we achieved high productivity with a data-parallel execution path. Movie production was done on small subsets of GPU nodes with ParaView's native volume renderer.
+deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was of course to use parallel and scalable I/O routines. We used VTK's native XML Partitioned file format convention for cartesian Image Data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay was not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
 
 %% The Appendices part is started with the command \appendix;
