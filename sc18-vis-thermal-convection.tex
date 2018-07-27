@@ -405,18 +405,17 @@ To further evaluate the memory cost on a single node, we restricted our test sam
 \end{table}
 
 The high initial setup cost incurred with the NVIDIA IndeX library is due to higher volume transfer between CPU and GPU, a cost that increases further when in parallel mode, as the current
-implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress \footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
+implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress\footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
 \newline
 If memory costs are substantial, more nodes, and/or more GPUs will be required,
-increasing the run-time cost of the visualization. Our data domain is quite large
-indeed, and we are not able to load a half-size domain on a single node equipped
+increasing the run-time cost of the visualization. Our data domain is quite large and we are not able to load a half-size domain on a single node equipped
 with GPUs. Indeed, the 64Gb RAM on the node is the hard limitation. On the other hand,
 the nodes on the multi-core partition of Piz daint with dual-Xeon chips and 128Gb of RAM can accomodate the data, in quarter-size,
 half-size, or even full-size domain. We were able to measure the startup cost for
 the first image. We are pleased to report that the OSPRay based implementation,
 using a single compute node and 72 execution threads has linear costs for
 the startup image. We have tested the quarter-size, half-size and the full domain
-and we report the delivery of the first image in 2.1, 4.0, and 8.0 seconds, respectively. the associated cost in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respesctively.
+and we report the delivery of the first image in 2.1, 4.0, and 8.0 seconds, respectively. the associated cost in RAM is also linear, at 27.6Gb, 55.1Gb and 110 Gb, respectively.
  
 After the first frame has been built, our experience is that renderings
 are done at interactive speed with all three libraries tested.
