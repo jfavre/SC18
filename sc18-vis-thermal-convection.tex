@@ -412,6 +412,33 @@ Color and opacity transfer functions editing is also interactive and very intuit
  We ran scripted navigation scenarios through a static domain loaded in memory
 at HD (1920x1080 pixels) and 4K UDH (3840x2160 pixels) resolutions.
 
+We created a benchmark test to mimic an initial discovery scenario throughout
+the domain, starting for an overal view of the full grid, zooming in, rotating
+the view-point, and finally zooming in to emerse the viewer into the volume. From
+an initial pixel coverage of about 80\%, we then move quickly into the scene such that
+the viewport is completely covered by active pixels, i.e. all pixel rays hit the volume.
+Table \ref{tab:osprayThreads} summarizes
+our average Frames/second statistics for 300 frames of navigation.
+
+\begin{table}[htb]
+  \centering
+  \caption{
+    Average frames/sec for the full size domain at different pixel resolution
+  }
+  \label{tab:osprayThreads}
+
+  \begin{tabular}{lccc}
+    \hline
+    Pixel Resolution & 18 threads & 36 threads & 72 threads\\
+    \hline
+    WXGA (1280x800) & 6.3f/s &  6.3f/s & 6.3f/s \\
+    HD(1920x1080) & 6.3f/s &  6.3f/s & 6.3f/s \\
+    UDH (3840x2160) & 6.3f/s &  6.3f/s & 6.3f/s\\
+    \hline
+
+  \end{tabular}
+\end{table}
+
 \subsection{Rendering the full domain in parallel}
 
 We have discussed the fact that the two GPU-based rendering solutions
