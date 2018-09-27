@@ -28,7 +28,7 @@
 \usepackage{url}
 \usepackage{bm}
 
-\usepackage[table]{xcolor} %temporary
+%%\usepackage[table]{xcolor} %temporary
 
 %% Accepted SC SciVis Showcase submissions will be published in
 %% Parallel Computing.
@@ -402,38 +402,42 @@ We tested the quarter-size, half-size and the full domain and report the deliver
 of the first image in 2.1, 4.0, and 8.0 seconds, respectively. The associated cost
 in RAM is also linear, at 27.6 Gb, 55.1 Gb and 110 Gb, respectively.
  
-After the first frame has been built, our experience is that renderings
-are done at interactive speed with all three libraries tested.
+After the first frame has been built, our experience is that smooth interaction
+is possible with all three libraries tested. In fact, ParaView supports acceleration
+shortcuts for lower precision renderings during interactive navigation,
+enabling a confortable user experience for mouse-driven interaction,
+with little degradation of quality. 
 Color and opacity transfer functions editing is also interactive and very intuitive.
- We ran scripted navigation scenarios through a static domain loaded in memory
-at HD (1920x1080 pixels) and 4K UDH (3840x2160 pixels) resolutions.
 
-We created a benchmark test to mimic an initial discovery scenario throughout
-the domain, starting for an overal view of the full grid, zooming in, rotating
-the view-point, and finally zooming in to emerse the viewer into the volume. From
-an initial pixel coverage of about 80\%, we then move quickly into the scene such that
-the viewport is completely covered by active pixels, i.e. all pixel rays hit the volume.
+Movie quality renderings on the other hand are done with all level-of-details optimizations turned off and we tested the rendering speed of that particular mode, in a batch production test.
+We created an OSPRay-based benchmark test to mimic a navigation fly-through in
+a full resolution domain, starting from an overal view of the full grid, zooming in, rotating
+the view-point, and finally zooming in to immerse the viewer into the volume. From
+an initial pixel coverage of about 80\%, we then move into the scene such that
+the viewport is completely covered by active pixels, i.e. all pixel rays hit the volume.  Using the OSPRay library which is a CPU-only implementation, rendering times are of course dependent on frame buffer pixel resolution. We rendered this short movie segment at two different pixel resolution, Full HD (1920x1080 pixels) and 4K Ultra HD (3840x2160 pixels), to evaluate the impact on pixel resolution.
 Table \ref{tab:osprayThreads} summarizes
-our average Frames/second statistics for 300 frames of navigation.
+our average rendering time per frame for 300 frames of navigation.
 
 \begin{table}[htb]
   \centering
   \caption{
-    Average frames/sec for the full size domain at different pixel resolution
+    Average rendering for the full size domain at different pixel resolution
   }
   \label{tab:osprayThreads}
 
   \begin{tabular}{lccc}
     \hline
-    Pixel Resolution & 18 threads & 36 threads & 72 threads\\
+    Pixel Resolution vs. nb. of threads  & 36 threads & 72 threads\\
     \hline
-    WXGA (1280x800) & 6.3f/s &  6.3f/s & 6.3f/s \\
-    HD(1920x1080) & 6.3f/s &  6.3f/s & 6.3f/s \\
-    UDH (3840x2160) & 6.3f/s &  6.3f/s & 6.3f/s\\
+    WXGA (1280x800) & 2.85 secs &  1.69 secs \\
+    FHD(1920x1080) & 3.37 secs &  1.90 secs \\
+    4K UHD (3840x2160) & 4.81 secs &  2.73 secs \\
     \hline
 
   \end{tabular}
 \end{table}
+
+Our compute nodes are featuring two sockets with eighteen cores each. We note the clear benefit of using hyperthreading to spawn up to seventy-two threads for an increased throughpout. We also note that increasing frame buffer resolution to decent sizes is not a showstopper. 
 
 \subsection{Rendering the full domain in parallel}
 
