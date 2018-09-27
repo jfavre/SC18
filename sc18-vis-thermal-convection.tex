@@ -77,7 +77,7 @@ University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 \begin{abstract}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
 is covered by water \cite{int14}. Strong currents are transporting warm water around the world
-and therefore don't only make life possible, but also allow us to harvest its
+and therefore not only make life possible, but also allow us to harvest its
 power producing energy. But humanity tends to easily forget that oceans also
 yield a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
@@ -114,8 +114,8 @@ Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Sol
 
 Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer (1988) \cite{man88} observed that it can contribute a heat increase up to $ \sim 10 ^ \circ $C on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott (1999) \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixed layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature can be based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
-requirements and the performance of these libraries are discussed.
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
+requirements, and the performance of these libraries are discussed.
 
 \section{Numerical Simulations}
 Direct numerical simulations (DNS) were performed with the second-order finite-difference
@@ -139,7 +139,7 @@ Navier-Stokes equations with the Boussinesq approximation on a staggered grid ar
 
 We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with streamwise, spanwise and wallnormal components. $ \theta $ is the non-dimensional temperature ranging from $ 0 \leq \theta \leq 1 $. The simulations are performed in a computational box with periodic boundary conditions in streamwise and spanwise directions and confined by a heated plate below and a cooled plate on top. The shearing of the flow is implemented by a Couette flow setting where both top and bottom plates of the flow are moved in opposite directions with the speed $ u_w $ keeping the average bulk velocity at zero and therefore minimizing dissipation errors. The domain size is ($ L_x \times L_y \times L_z $) = ($ 9\pi h \times 4\pi h \times h $) using a grid of ($ n_x \times n_y \times n_z $) = ($ 6912 \times 3456 \times 384 $) which is homogeneously distributed in the streamwise and spanwise directions and clustered with an error-function $ \eta(\xi)=erf(2\xi)/erf(2) $ in wallnormal direction.
 
-The open sourced finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using a MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
+The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
 For this visualization showcase, data from Blass et al. \cite{bla18} was used, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number (Eqn. \ref{eqn:Ra}), and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number (Eqn. \ref{eqn:Re}), while keeping the Prandtl number (Eqn. \ref{eqn:Pr}), which is the ratio of thermal and viscous viscosity of a fluid, at unity. The equations read:
 
@@ -161,7 +161,7 @@ Pr= \frac{\nu}{\kappa},
 
 where $ \beta $ is the thermal expansion coefficient of the fluid, $ g $ the
 gravitational acceleration, $ \kappa $ the thermal diffusivity, $ \nu $ the
-kinematic viscosity of the fluid, $ h $ the distance between the plates and
+kinematic viscosity of the fluid, $ h $ the distance between the plates, and
 $ u_w $ the wall velocity.
 
 \begin{figure}
@@ -185,7 +185,7 @@ final flow state (Fig. \ref{fig:overview}c).
 In turbulent flows it is very important to research how certain characteristic
 parameters are influenced by the flow. Changing flow structures might have a
 supporting effect or may disrupt a previously transport-favorable flow situation. 
-In thermal convection, such parameter is the heat transfer, non-dimensionally
+In thermal convection, the heat transfer is such a parameter, non-dimensionally
 defined through the Nusselt number:
 
 \begin{equation} %Nusselt equation
@@ -203,21 +203,21 @@ In the accompanying video we are able to display the previously two-dimensionall
 	\caption{\label{fig:smallscale} Zoom of an instantaneous snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re=6000 $.}
 \end{figure}
 
-It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations presented in this paper allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
+It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
 
 The mesh used in our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
 The temperature scalar field stored as \it{float32} \rm takes 36 GB of memory, an
 overwhelming size to handle on a normal desktop. Using different parallel programming
 paradigms has enabled us to provide an engaging environment
 to promote interactive tuning of visualization options and high productivity for movie
-generation. We use ParaView v5.5.2, a world-class, open-source, multi-platform data analysis and
+generation. We use ParaView v5.5.2, a world-class, open source, multi-platform data analysis and
 visualization application installed on Piz Daint. Piz Daint, a hybrid Cray XC40/XC50 system,
 is the flagship supercomputer of the Swiss National HPC service. We have deployed
 and tested several solutions within ParaView where parallelism is expressed
 at different degrees: data-parallel visualization pipelines with GPU-based renderings,
 or multi-threaded parallelism for software renderings.
 
-\section{Volume rendering libraries and setup}
+\section{Volume Rendering Libraries and Setup}
 
 Visualization of 3D scalar fields is a very mature field. Many techniques are
 available to get some sense of the 3D nature of the data, and its variations
@@ -225,16 +225,18 @@ through the volume. Surface-based renderings with isosurface thresholds or
 slicing planes have a great appeal in that they are easy to use, but volumetric
 renderings, first made popular in medical applications, are also a great fit for
 scalar visualizations, especially in the realm of time-dependent outputs.
-\newline
-ParaView's "Smart" VolumeMapper is an image mapper
+%\newline
+
+ParaView's ``Smart'' VolumeMapper is an image mapper
 that will delegate to a specific volume mapper based on rendering parameters and
 available hardware. It is a convenient
 wrapper to test multiple options.
-\newline
+%\newline
+
 The largest partition of the Piz Daint supercomputer
-nodes is equipped with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
+nodes has each node equipped with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
 Tesla P100 GPU (16 GB RAM), so our priority is to evaluate the GPU-based implementations.
-ParaView's "Ray Cast Only" mode is also available but we have found its performance far
+ParaView's ``Ray Cast Only'' mode is also available but we have found its performance far
 below the other options, and we discarded its use. We aim to test ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
 IndeX, and against a CPU-only solution, to give a valid option to users of
@@ -249,8 +251,8 @@ evaluate the memory cost and resources (CPU, GPU) required to get a first image
 on the screen, and see if color/opacity transfer
 function editing, as well as other image tuning can be done in real time, using
 any of the three methods proposed. In the evaluation of performance costs, ParaView's
-benchmark code enables fully automatized testing with a careful management of
-double buffering, saving images from the back buffer to bypass driver optimizations.
+benchmark code enables fully automated testing with a careful management of
+double buffering, by saving images from the back buffer to bypass driver optimizations.
 
 In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
 relaxing the need to have a server-side X-Windows server running on the compute node.
@@ -258,7 +260,8 @@ This enables headless, offscreen rendering with GPU acceleration. We note howeve
 the GPUs provide phenomenal compute power, they are limited by the available memory
 (16 GB on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs, we are actually forced to use data-parallel
 pipelines on multiple nodes to use the aggregate memory of the different GPUs.
-\newline
+%\newline
+
 Our third option, however, uses OSPRay and software rendering and does not suffer
 from a memory hard limit. Compute nodes are easily and often found with large memory
 banks. We use Piz Daint's high memory nodes with 128 GB of RAM, where our mesh of
@@ -268,12 +271,14 @@ over 9 billion voxels can be rendered easily on a single node.
 	\centering
 	\includegraphics[width=\linewidth]{fig2}% 
 	\caption{\label{fig:gpucloseup} Volume renderings of temperature with ParaView's
-Smart Shader (left), and with NVIDIA IndeX (right)}
+Smart Shader (left), and with NVIDIA IndeX (right).}
 \end{figure}
 
 \subsection{ParaView's GPU Ray Casting} \label{smart}
 
-ParaView's most efficient mapper - if the GPU hardware supports it - is a volume
+Assuming GPU hardware is present,
+ParaView's most efficient mapper 
+is a volume
 mapper that performs ray casting on the GPU using fragment programs. Care must
 be taken when evaluating and comparing the different approaches. We highlight the
 fact that in this preferred mode, ParaView converts the 32-bit float data to 16-bit
@@ -284,9 +289,9 @@ but no degradation due to down-converted data.
 \subsection{NVIDIA IndeX} \label{index}
 
 NVIDIA IndeX \cite{NVIDIAIndeX} is a commercial 3D volumetric visualization SDK developed to enable
-the visualization of massive datasets. NVIDIA has worked in tandem with Kitware to
+the visualization of massive data sets. NVIDIA has worked in tandem with Kitware to
 bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
-of a close partnership between the Swiss National Supercomputing Center (CSCS),
+of a close partnership between the Swiss National Supercomputing Center (CSCS)
 and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
 plugin v2.1 with the core library NVIDIA IndeX 1.5 (build 299900.2384). In
 Fig. \ref{fig:gpucloseup} (right), an NVIDIA IndeX rendering is done with identical
@@ -298,7 +303,7 @@ for the scalar opacity unit distance as coded in the three proposed implementati
 
 OSPRay \cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
 shading effects, large models and non-polygonal primitives. OSPRay can distributes 
-"bricks" of data as well as "tiles" of the framebuffer, although in our current
+``bricks'' of data as well as ``tiles'' of the framebuffer, although in our current
 implementation, we only use brick subdivisions. The Texas Advanced Computing Center
 has developed a ParaView plugin which enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
@@ -311,7 +316,7 @@ OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
 OSPRay v1.6.1 library to provide a very efficient multi-threaded execution path
 taking advantage of Piz Daint's alternate partition of compute nodes. These nodes
 are built with two Intel Broadwell CPUs (2x18 cores and 64/128 GB RAM). We run
-ParaView with SLURM's option "--cpus-per-task=72 --ntasks-per-core=2", effectively
+ParaView with SLURM's option ``--cpus-per-task=72 --ntasks-per-core=2'', effectively
 taking full advantage of the multi-threading exposed by the LLVM and OSPRay libraries. 
 
 \subsection{Parallel Image Compositing}
@@ -325,7 +330,7 @@ for desktop image delivery. We note here that NVIDIA's IndeX uses a proprietary
 compositing library, so for the IndeX tests only, we disable ParaView's default
 image compositor.
 
-\section{Volume rendering of the thermal convection}
+\section{Volume Rendering of the Thermal Convection}
 
 \begin{figure}[!hbt]
 	\centering
@@ -340,7 +345,7 @@ they interact with each other, as seen in Fig. \ref{fig:zoom}. Our movie animati
 region of blue tint is superposed on top of the hotter region. Plumes emerging
 from the bottom and mixing into the cold regions highlight this phenomenon.
 
-\subsection{Visual effects}
+\subsection{Visual Effects}
 
 When presented with multiple visualizations including different illumination and
 shading, the scientists actually preferred the renderings which emphasize the
@@ -354,21 +359,22 @@ we discarded upon further analysis.
 	\centering
 	\includegraphics[width=\linewidth]{fig2montage}% 
 	\caption{\label{fig:shadings} Volume rendering with shading based on gradient
-estimation (left), and with OSPRay-enabled shadows (right)}
+estimation (left), and with OSPRay-enabled shadows (right).}
 \end{figure}
 
 
-\subsection{Rendering costs on a single node}
+\subsection{Rendering Costs on a Single Node}
 
-Volumetric rendering at this scale of grid has a non significant cost which we
+Volumetric rendering at this scale of grid has a non-significant cost which we
 briefly document here. Creating the first frame after data has been read in memory,
- i.e. the startup cost has a great impact in having users adopt a particular implementation.
+ i.e., the startup cost has a great impact in having users adopt a particular implementation.
 In a \it{post-hoc} \rm visualization, data would be read from disk; in an \it{in-situ} \rm
 scenario, data might have to be converted to VTK data structures. Thus, we measure performance
 after the time ParaView has collected all the data and created a bounding-box representation. This startup cost for the first image is also of paramount importance in a movie-making scenario, where data are read from disk, a single image is computed, and the whole visualization pipeline and hardware resources are flushed to visualize the next timestep.
-\newline
+%\newline
+
 We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options are enabled, triggering the building of internal structures until the first frame appears.
-In order to measure the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e. 2.28G voxels ($ 1730 \times 3455 \times 384 $), to fit the GPU RAM available.
+In order to measure the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e., 2.28G voxels ($ 1730 \times 3455 \times 384 $), to fit the available GPU RAM.
 
 \begin{table}[htb]
   \centering
@@ -389,9 +395,10 @@ In order to measure the memory cost on a single node, we restricted our test sam
   \end{tabular}
 \end{table}
 
-The high initial setup cost incurred with the NVIDIA IndeX library is due to higher volume transfer between CPU and GPU, a cost that increases further when in parallel mode, as the current
-implementation of IndeX will trigger re-execution of the data I/O because of larger than usual ghost layer requests. Work is in progress\footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
-\newline
+The high initial setup cost incurred by the NVIDIA IndeX library is due to higher volume transfer between CPU and GPU, a cost that increases further when in parallel, as the current
+implementation of IndeX triggers re-execution of the data I/O due to larger than usual ghost layer requirements. Work is in progress\footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
+%\newline
+
 If memory costs are substantial, more nodes, and/or more GPUs will be required,
 increasing the run-time cost of the visualization. Our data domain is quite large
 indeed, and we are not able to load a half-size domain on a single GPU node. Indeed, both
@@ -413,9 +420,9 @@ Color and opacity transfer functions editing is also interactive and very intuit
 Movie quality renderings on the other hand are done with all level-of-details optimizations turned off and we tested the rendering speed of that particular mode, in a batch production test.
 We created an OSPRay-based benchmark test to mimic a navigation fly-through in
 a full resolution domain, starting from an overall view of the full grid, zooming in, rotating
-the view-point, and finally zooming in to immerse the viewer into the volume. From
+the view-point, and finally zooming in to immerse the viewer in the volume. From
 an initial pixel coverage of about 80\%, we then move into the scene such that
-the viewport is completely covered by active pixels, i.e. all pixel rays hit the volume.  Using the OSPRay library which is a CPU-only implementation, rendering times are of course dependent on frame buffer pixel resolution. We rendered this short movie segment at two different pixel resolution, Full HD (1920x1080 pixels) and 4K Ultra HD (3840x2160 pixels), to evaluate the impact of pixel resolution on rendering costs.
+the viewport is completely covered by active pixels, i.e., all pixel rays hit the volume.  Using the OSPRay library which is a CPU-only implementation, rendering times are of course dependent on frame buffer pixel resolution. We rendered this short movie segment at two different pixel resolution, Full HD (1920x1080 pixels) and 4K Ultra HD (3840x2160 pixels), to evaluate the impact of pixel resolution on rendering costs.
 Table \ref{tab:osprayThreads} summarizes
 our average rendering time per frame for 300 frames of navigation.
 
@@ -440,10 +447,10 @@ our average rendering time per frame for 300 frames of navigation.
 
 Our compute nodes are featuring two sockets with eighteen cores each. We note the clear benefit of using hyper-threading to spawn up to seventy-two threads for an increased throughput. We also note that increasing frame buffer resolution to decent sizes is not a showstopper. 
 
-\subsection{Rendering the full domain in parallel}
+\subsection{Rendering the Full Domain in Parallel}
 
 We have discussed the fact that the two GPU-based rendering solutions
-are limited by the available GPU memory. A nearly 9G voxels dataset just will
+are limited by the available GPU memory, as a nearly 9G voxels data set will
 not fit on a single GPU. To enable our visualization, we must use a parallel 
 set of nodes. We measure again the initial cost for the first image
 (after all I/O has been done), and also the frame rate achieved in a scripted
@@ -474,33 +481,36 @@ per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA Ind
 \end{table}
 
 Finally, we note that with 8 GPUs, the NVIDIA IndeX implementation offers a faster
-frame/sec rate. The startup cost however remains a big bottleneck. Discussion with
+frame/sec rate. The startup cost however remains a significant bottleneck. Discussion with
 the NVIDIA developers are on-going and our hopes is that this will be much improved
 in future versions of the SDK.
 
-\section{Summary and conclusion}
+\section{Summary and Conclusion}
 
 We have discussed three implementations of volume rendering for a thermal convection
 simulation output of substantial size. Our time-dependent output is stored as a
 \it{float32} \rm array of 36G bytes per timestep. This is a non-trivial size for the most common
-GPUs. This leaves the scientist with two options: 1) Use a data-parallel visualization
+GPUs. This leaves the scientist with two options: 1) use a data-parallel visualization
 application with GPU-assisted rendering, or 2) use a \it{software-only} \rm
 visualization environment which can fit on compute nodes where large memory
 banks are easily found. Our choice was to deploy a single application, the open-source
 ParaView, thanks to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
 driven by fully automatized python scripts and a benchmarking suite of tools
 available in ParaView itself, enabled us to confront all possible implementations with reduced variability.
-\newline
-We tested two GPU-based rendering options. We first used ParaView's native volume rendering which has proved to offer the best compromise between startup time, and interactive performance; We also tested an alternative solution based on a new library in current development by NVIDIA. In our current setup, the IndeX library offers superior interactive rendering, however at non negligible initialization costs.
-\newline
+%\newline
+
+We tested two GPU-based rendering options. We first used ParaView's native volume rendering which has proved to offer the best compromise between startup time, and interactive performance; We also tested an alternative solution based on a new library in current development by NVIDIA. In our current setup, the IndeX library offers superior interactive rendering, however at non-negligible initialization costs.
+%\newline
+
 We evaluated an implementation of volume rendering provided by the Intel OSPRay library,
 a software-based framework which can take remarkable advantage of a multi-threaded
-execution layer. This also fitted very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
+execution layer. This also fit very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
 
-Our emphasis in creating the scientific visualization shown in the accompanying video was two-fold. Have an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
-deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was of course to use parallel and scalable I/O routines. We used VTK's native XML Partitioned file format convention for cartesian Image Data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay was not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
+Our emphasis in creating the scientific visualization shown in the accompanying video was two-fold. 
+First, having an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
+deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was of course to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay is not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The presented visualization techniques combined with the performed large-grid simulations give us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. The presented visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. It is now the scientific duty to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.  
+The presented visualization techniques applied to the performed large-grid simulations give us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.  
 
 
 %% The Appendices part is started with the command \appendix;
@@ -512,7 +522,7 @@ The presented visualization techniques combined with the performed large-grid si
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulation runs at the Swiss National Supercomputing Center, under compute allocations s713 and s802. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting.
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulation at the Swiss National Supercomputing Center, under compute allocations s713 and s802. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting.
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
