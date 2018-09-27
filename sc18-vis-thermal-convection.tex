@@ -82,7 +82,7 @@ power producing energy. But humanity tends to easily forget that oceans also
 yield a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
 linked to the circulation in the ocean due to its large coverage of the earth's surface.
-Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations. We present here visualizations of sheared thermal convection in very large scale simulations run on the Piz Daint supercomputer.
+Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations. We present here visualizations of sheared thermal convection in very large scale numerical simulations.
 The visualizations are based on volume renderings of the temperature field. To address the needs of supercomputer users
 with different hardware and software resources, we evaluate different implementations
 supported in the ParaView \cite{Ahrens2005} environment: two GPU-based solutions
@@ -112,9 +112,10 @@ Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Sol
 \section{Introduction}
 \label{sec:Introduction}
 
-Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer (1988) \cite{man88} observed that it can contribute a heat increase up to $ \sim 10 ^ \circ $C on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott (1999) \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixed layers everywhere in the ocean. It is observed that only little scale separations between up-down mixing and lateral geostrophic flows are present. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to not only produce but also visualize three-dimensional data of such flows to be able to further study these systems.
+Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer (1988) \cite{man88} observed that it can contribute a heat increase up to $ \sim 10 ^ \circ $C on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott (1999) \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixed layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature can be based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. 
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature can be based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
+requirements and the performance of these libraries are discussed.
 
 \section{Numerical Simulations}
 Direct numerical simulations (DNS) were performed with the second-order finite-difference
