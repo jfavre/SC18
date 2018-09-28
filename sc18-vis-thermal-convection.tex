@@ -194,7 +194,7 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 \end{equation} 
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and dynamic interaction of turbulent structures with each other.
-In the accompanying video we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. To have the chance to observe the flow while evolving and transitioning through different regimes is a great chance not only to statically observe different flow states at fixed locations in space, but to actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
+In the accompanying video we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but also to actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
 
 
 \begin{figure}
@@ -243,7 +243,8 @@ IndeX, and against a CPU-only solution, to give a valid option to users of
 supercomputers not equipped with GPUs.
 Our performance evaluation is based on ParaView's benchmarking Python source
 code\footnote{source code found in ./Wrapping/Python/paraview/benchmark/}.
-\newline
+%newline
+
 For all methods used, we have ignored disk-based I/O costs. There is often quite
 a bit of variability when running on a large distributed file system shared by
 hundreds of users. Our motivations are rendering-centered, and two-fold:
@@ -257,7 +258,7 @@ double buffering, by saving images from the back buffer to bypass driver optimiz
 In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
 relaxing the need to have a server-side X-Windows server running on the compute node.
 This enables headless, offscreen rendering with GPU acceleration. We note however that although
-the GPUs provide phenomenal compute power, they are limited by the available memory
+the GPUs provide phenomenal rendering power, they are limited by the available memory
 (16 GB on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs, we are actually forced to use data-parallel
 pipelines on multiple nodes to use the aggregate memory of the different GPUs.
 %\newline
@@ -374,7 +375,7 @@ after the time ParaView has collected all the data and created a bounding-box re
 %\newline
 
 We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options are enabled, triggering the building of internal structures until the first frame appears.
-In order to measure the memory cost on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e., 2.28G voxels ($ 1730 \times 3455 \times 384 $), to fit the available GPU RAM.
+In order to measure the memory cost of all three libraries under evaluation on a single node, we restricted our test sample to a quarter-size domain of the original grid, i.e., 2.28G voxels ($ 1730 \times 3455 \times 384 $), to fit the available GPU RAM.
 
 \begin{table}[htb]
   \centering
@@ -482,7 +483,7 @@ per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA Ind
 
 Finally, we note that with 8 GPUs, the NVIDIA IndeX implementation offers a faster
 frame/sec rate. The startup cost however remains a significant bottleneck. Discussion with
-the NVIDIA developers are on-going and our hopes is that this will be much improved
+the NVIDIA developers is on-going and our hopes is that this will be much improved
 in future versions of the SDK.
 
 \section{Summary and Conclusion}
