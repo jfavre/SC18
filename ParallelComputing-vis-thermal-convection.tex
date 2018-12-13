@@ -78,16 +78,18 @@ University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
 is covered by water \cite{int14}. Strong currents are transporting warm water around the world
 and therefore not only make life possible, but also allow us to harvest its
-power producing energy. But humanity tends to easily forget that oceans also
+power producing energy. Yet, oceans also
 yield a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
 linked to the circulation in the ocean due to its large coverage of the earth's surface.
-Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations. We present here visualizations of sheared thermal convection in very large scale numerical simulations.
-The visualizations are based on volume renderings of the temperature field. To address the needs of supercomputer users
-with different hardware and software resources, we evaluate different implementations
-supported in the ParaView \cite{Ahrens2005} environment: two GPU-based solutions
-with Kitware's native volume mapper or NVIDIA's IndeX library, and a software-only
-OSPRay-based implementation.
+Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations.
+To support these very large scale numerical simulations and enable the scientists to interpret their output,
+we deploy an interactive visualization framework to study sheared thermal convection.
+The visualizations are based on volume renderings of the temperature field.
+To address the needs of supercomputer users with different hardware and software resources,
+we evaluate different implementations supported in the ParaView \cite{Ahrens2005} environment:
+two GPU-based solutions with Kitware's native volume mapper or NVIDIA's IndeX library,
+and a software-only OSPRay-based implementation.
 
 \end{abstract}
 
@@ -229,15 +231,16 @@ scalar visualizations, especially in the realm of time-dependent outputs.
 
 ParaView's ``Smart'' VolumeMapper is an image mapper
 that will delegate to a specific volume mapper based on rendering parameters and
-available hardware. It is a convenient
-wrapper to test multiple options.
+available hardware. It is a convenient wrapper to test multiple options.
 %\newline
 
-The largest partition of the Piz Daint supercomputer
-nodes has each node equipped with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
-Tesla P100 GPU (16 GB RAM, driver 396.44), so our priority is to evaluate the GPU-based implementations.
-ParaView's ``Ray Cast Only'' mode is also available but we have found its performance far
-below the other options, and we discarded its use. We aim to test ParaView's GPU
+The largest partition of the Piz Daint supercomputer nodes has each node equipped
+with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
+Tesla P100 GPU (16 GB RAM, OpenGL driver 396.44), so our priority is to evaluate
+the GPU-based implementations.
+ParaView's ``Fixed Point Ray Cast'' mode is also available but we have found its performance far
+below the other options. The lack of advanced parameter settings in the Graphical
+User Interface (GUI) of ParaView also led us to abandon its evaluation. We tested ParaView's GPU
 ray casting implementation, against an NVIDIA-developed custom library called
 IndeX, and against a CPU-only solution, to give a valid option to users of
 supercomputers not equipped with GPUs.
@@ -274,16 +277,16 @@ over 9 billion voxels can be rendered easily on a single node.
 
 When GPU hardware is present, ParaView's most efficient mapper is a volume
 mapper that performs ray casting on the GPU using vertex and fragment programs.
-The core ray-tracing engines are coded in GLSL and require a graphics driver supporting at least
-OpenGL version 3.2 \cite{ShadersInVTK}. The data is stored into a vtkVolumeTexture which manages
-the OpenGL volume texture, its type and internal format.
-Although this class supports streaming data into
-separate blocks to make it fit the GPU memory, we have not used this option which imposes
+The core ray-tracing engines are coded in GLSL and require a graphics driver
+supporting at least OpenGL version 3.2 \cite{ShadersInVTK}. The data is stored
+into a vtkVolumeTexture which manages the OpenGL volume texture, its type and
+internal format. Although this class supports streaming data into separate blocks
+to make it fit the GPU memory, we have not used this option which imposes
 a performance trade-off, artificially going over the fixed GPU memory limit.
 Block streaming, sometimes called data bricking may also suffer from artifacts at
 the block boundaries where gradient computations are done to support shading.
 ParaView's OpenGL VolumeRayCastMapper binds the 32-bit float scalar field array
- to a three-dimensional texture image of type GL\_FLOAT with a call to glTexImage3D().
+to a three-dimensional texture image of type GL\_FLOAT with a call to glTexImage3D().
 An explicit Texture object is created, transfering data from CPU memory to GPU memory.
 The GPU's memory and the CPU to GPU transfer bus set the maximum achievable performance.
 
@@ -321,7 +324,11 @@ has developed a ParaView plugin which enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
-In the case of OSPRay, we rely on a different parallel computing paradigm.
+OSPRay can use its own internal Message Passing Interface (MPI) layer to replicate
+data across MPI processes and composite the image. This would result in linear
+performance scaling and supports secondary rays used in ParaView's \it{pathtracer} \rm mode,
+but would be prohibitive in terms of communication costs.
+In this study, we rely on a different parallel computing paradigm.
 The emphasis is no more on data parallelism, but rather on multi-threaded execution.
 A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
 OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
@@ -376,7 +383,7 @@ estimation (left), and with OSPRay-enabled shadows (right).}
 \end{figure}
 
 
-\subsection{Rendering Costs on a Single Node}
+\subsection{GPU-based rendering on a Single Node}
 
 Volumetric rendering at this scale of grid has a non-significant cost which we
 briefly document here. Creating the first frame after data has been read in memory,
@@ -392,9 +399,9 @@ Unlike ParaView's native GPU ray caster implementation which does not enable blo
 streaming, the NVIDIA IndeX library processes data by chunks. However, it does so
 by bringing volume sub-extents \it{incrementally} \rm into the GPU memory.
 Early volume chunks are rendered properly as long as the GPU memory is not exhausted.
-When memory is out, late chunks actually corrupt the final image. Our attempts to
+When memory runs out, late chunks actually corrupt the final image. Our attempts to
 render a 4 billion voxels dataset did not succeed with NVIDIA IndeX. We observe failures
-to allocate ($ 64 \times 64 \times 64 $) cubes and the final images are corrupted.
+to allocate $64^3$ voxel cubes and the final images are corrupted.
 %\newline
 
 We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options
@@ -402,7 +409,7 @@ are enabled, triggering the building of internal structures until the first fram
 In order to measure the memory cost of all three libraries under evaluation on a single node,
 we restricted our test sample to a quarter-size domain of the original grid, i.e., 2.28G voxels
 ($ 1730 \times 3456 \times 384 $), to fit the available GPU RAM. The GPU memory
-usage \footnote{GPU memory usage was sampled with the nvidia-smi diagnostic tool}
+usage\footnote{GPU memory usage was sampled with the nvidia-smi diagnostic tool}
 settles at 9.1 GB for ParaView native raycaster, and 12.3 GB for NVIDIA IndeX. 
 
 \begin{table}[htb]
@@ -424,13 +431,15 @@ settles at 9.1 GB for ParaView native raycaster, and 12.3 GB for NVIDIA IndeX.
   \end{tabular}
 \end{table}
 
-We note both a much higher memory consumption on the application side of ParaView and
-on the GPU memory side for the NVIDIA IndeX implementation. The high initial setup cost incurred by the NVIDIA IndeX library is due to higher
-volume transfer between CPU and GPU, a cost that increases further when in parallel,
-as the current implementation of IndeX triggers re-execution of the data I/O due
-to larger than usual ghost layer requirements. The source code of the IndeX \it{volume importer} \rm also includes three nested loops to swap data order from ParaView's native \it{zyx} \rm format (x is the fastest moving index) to IndeX \it{xyz} \rm format (x is the slowest moving index)  Work is in progress\footnote{personal communication with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
+We note both a much higher memory consumption on the application side of ParaView
+and on the GPU memory side for the NVIDIA IndeX implementation. The high initial 
+setup cost incurred by the NVIDIA IndeX library is due to higher volume transfer
+between CPU and GPU, a cost that increases further when in parallel, as the current
+implementation of IndeX triggers re-execution of the data I/O due to larger than
+usual ghost layer requirements. Work is in progress\footnote{personal communication
+with NVIDIA Dev. team} to minimize this impact in a future version of the plugin.
 %\newline
-
+\subsection{CPU-based rendering on a Single Node}
 If memory costs are substantial, more nodes, and/or more GPUs will be required,
 increasing the run-time cost of the visualization. Our data domain is quite large
 indeed, and we are not able to load a half-size domain on a single GPU node. Indeed, both
@@ -446,10 +455,10 @@ is OSPRay's management of memory. OSPRay volumes can be stored in two different 
 The first variant named \it{shared structured volume} \rm matches ParaView's data layout.
 Version 5.6 of ParaView is the first version where this zero-copy access pattern is used
 and it provides both a faster startup time and a much lower memory footprint, as compared
-to previous work. Indeed, we reported in an earlier work \cite{SC18ThermalConvection},
+to previous work. Indeed, we reported earlier on
 the use of OSPRay's alternate implementation called \it{block bricked volume} \rm whereby
 data locality in memory is increased by arranging voxel data in smaller chuncks. This came
-however at a higher cost, doubling the memory footprint on the CPU. 
+however at a higher cost, doubling the memory footprint on the CPU\cite{SC18ThermalConvection}. 
  
 After the first frame has been built, our experience is that smooth interaction
 is possible with all three libraries tested. In fact, ParaView supports acceleration
@@ -458,7 +467,9 @@ enabling a comfortable user experience for mouse-driven interaction,
 with little degradation of quality. 
 Color and opacity transfer functions editing is also interactive and very intuitive.
 
-Movie quality renderings on the other hand are done with all level-of-details optimizations turned off and we tested the rendering speed of that particular mode, in a batch production test.
+Movie quality renderings on the other hand are done with all level-of-details
+optimizations turned off and we tested the rendering speed of that particular
+mode, in a batch production test.
 We created an OSPRay-based benchmark test to mimic a navigation fly-through in
 a full resolution domain, starting from an overall view of the full grid, zooming in, rotating
 the view-point, and finally zooming in to immerse the viewer in the volume. From
@@ -466,8 +477,9 @@ an initial pixel coverage of about 80\%, we then move into the scene such that
 the viewport is completely covered by active pixels, i.e., all pixel rays hit the volume.
 Using the OSPRay library which is a CPU-only implementation, rendering times are of course
 dependent on frame buffer pixel resolution. We rendered this short movie segment
-at two different pixel resolution, Full HD (1920x1080 pixels) and 4K Ultra HD (3840x2160 pixels),
-to evaluate the impact of pixel resolution on rendering costs.
+at three different pixel resolution, WXGA (1280x800 pixels), Full HD (1920x1080 pixels)
+and 4K Ultra HD (3840x2160 pixels), to evaluate the impact of pixel resolution on rendering costs.
+We also evaluated the use of hyper-threading to further boost performance.
 Table \ref{tab:osprayThreads} summarizes
 our average rendering time per frame for 300 frames of navigation.
 
@@ -482,28 +494,24 @@ our average rendering time per frame for 300 frames of navigation.
     \hline
     Pixel Resolution vs. \# of threads  & 36 threads & 72 threads\\
     \hline
-    WXGA (1280x800) & 2.85 secs &  1.69 secs \\
-    FHD(1920x1080) & 3.37 secs &  1.90 secs \\
-    4K UHD (3840x2160) & 4.81 secs &  2.73 secs \\
+    WXGA (1280x800 pixels) & 2.85 secs &  1.69 secs \\
+    FHD(1920x1080 pixels) & 3.37 secs &  1.90 secs \\
+    4K UHD (3840x2160 pixels) & 4.81 secs &  2.73 secs \\
     \hline
 
   \end{tabular}
 \end{table}
 
-Our compute nodes are featuring two sockets with eighteen cores each. We note the clear benefit of using hyper-threading to spawn up to seventy-two threads for an increased throughput. We also note that increasing frame buffer resolution to decent sizes is not a showstopper. 
+Our compute nodes are featuring two sockets with eighteen cores each. We note the clear benefit of using hyper-threading to spawn up to seventy-two threads for an increased throughput. We also note that increasing frame buffer resolution to very large sizes is not a showstopper. 
 
 \subsection{Rendering the Full Domain in Parallel}
 
 We have discussed the fact that the two GPU-based rendering solutions
-are limited by the available GPU memory, as a nearly 9G voxels data set will
+are limited by the available GPU memory, since our 9-billion voxels data set will
 not fit on a single GPU. To enable our visualization, we must use a parallel 
 set of nodes. We measure again the initial cost for the first image
 (after all I/O has been done), and also the frame rate achieved in a scripted
-animation loop. Table \ref{tab:parallelgpu-tab} summarizes our findings. As noted earlier,
-the NVIDIA IndeX library sends the full 32-bit resolution data to the GPU. This
-leads to the application crashing when using 4 nodes only. Thus, a minimum
-allocation must contain 8 nodes/GPUs. Conservatively, we may say that 1 giga-voxel
-per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA IndeX library.
+animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results, with runs distributed amongst 4, 8 and 12 compute nodes.
 
 \begin{table}[htb]
   \centering
@@ -516,19 +524,34 @@ per GPUs is a good rule of thumb to do a resource allocation if using NVIDIA Ind
     \hline
     Rendering library & Startup (secs) & frames/sec\\
     \hline
-    ParaView 4 GPU Mapper & 6.3 secs &  0.19 \\
-    ParaView 8 GPU Mapper & 3.2 secs &  0.30 \\
-    NVIDIA 4 IndeX & n/a &  n/a\\
-    NVIDIA 8 IndeX & 49 secs &  1.48\\
+     4-node GPU RayCaster & 8.2 secs &  0.19 \\
+     8-node GPU RayCaster & 4.6 secs &  0.27 \\
+    12-node GPU RayCaster & 2.9 secs &  0.44 \\
+    \hline
+     4-node NVIDIA IndeX & 18.9 secs &  0.56\\
+     8-node NVIDIA IndeX & 12.4 secs &  1.48\\
+    12-node NVIDIA IndeX & 9.8 secs &  1.80\\
     \hline
 
   \end{tabular}
 \end{table}
 
-Finally, we note that with 8 GPUs, the NVIDIA IndeX implementation offers a faster
-frame/sec rate. The startup cost however remains a significant bottleneck. Discussion with
-the NVIDIA developers is on-going and our hopes is that this will be much improved
-in future versions of the SDK.
+As expected, startup times decrease almost linearly with the number of compute nodes,
+since less data is transfered over from CPU memory to GPU memory. Our animation benchmark
+loads a single timestep of data, thus, once the data has migrated to the GPU, there is
+hardly any CPU to GPU communication apart from a single frame buffer image, and
+we see \it{frames per second} \rm rates grow somewhat linearly since there is less workload per GPU. 
+In a movie production setting where all timestep outputs are read once, rendered once
+and are then discarded, the startup cost of any rendering library needs to be weighted
+against the I/O costs. Although our data I/O statistics show quite a bit of variation
+because of the high load of our multi user system with over 5000 compute nodes,
+our simulation data are read, \it{in average}\rm, in about 32 seconds (resp. 16, and 25 seconds)
+on 4 nodes (resp. 8 and 12 nodes). We see that the initialization of the rendering sub-system
+has a greater impact than suspected, and that in an \it{in-situ} \rm scenario,
+it would be the singlemost important barrier to performance. The initialization of
+the NVIDIA IndeX has the most significant bottleneck. Discussion with the NVIDIA developers
+is on-going and our hopes is that this will be much improved in future versions of the
+SDK since the library is still a very new development.
 
 \section{Summary and Conclusion}
 
@@ -555,7 +578,7 @@ Our emphasis in creating the scientific visualization shown in the accompanying 
 First, having an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
 deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was of course to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay is not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The presented visualization techniques applied to the performed large-grid simulations give us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.  
+The volume rendering framework deployed to analyse our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.  
 
 
 %% The Appendices part is started with the command \appendix;
