@@ -201,7 +201,7 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and the dynamic interaction of turbulent structures with each other.
-In the accompanying video \cite{SC18ThermalConvection} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
+In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
 
 
 \begin{figure}
@@ -373,7 +373,7 @@ this phenomenon.
 \subsection{Visual Effects}
 
 When presented with multiple visualizations including different illumination and
-shading, the scientists actually preferred the renderings which emphasize the
+shading, we preferred the renderings which emphasize the
 amorphous nature of the field data. As can be seen in Fig. \ref{fig:shadings},
 shading based on gradient estimation offers little improvement because our data
 does not have strong gradients, and the use of shadows which at first might seem
@@ -449,7 +449,7 @@ If memory costs are substantial, more nodes, and/or more GPUs will be required,
 increasing the run-time cost of the visualization. Our data domain is quite large, and we are not able to load a half-size domain on a single GPU node. Indeed, both
 the 64 GB RAM on the node and the 16 GB RAM on the GPU are hard limitations.
 The OSPRay-based software rendering is one way to alleviate this problem. We can load the full size
-domain on a single node of  the multi-core partition of Piz Daint with dual-Xeon
+domain on a single node of the multi-core partition of Piz Daint with dual-Xeon
 chips and 128 GB of RAM. We measured again the startup cost for the first image
 at full HD resolution (1920x1080 pixels),
 using 72 execution threads and found them to increase linearly with grid dimensions.
@@ -463,7 +463,7 @@ and it provides both a faster startup time and a much lower memory footprint, as
 to previous work. Indeed, we reported earlier on
 the use of OSPRay's alternate implementation called \it{block bricked volume} \rm whereby
 data locality in memory is increased by arranging voxel data in smaller chuncks. This came
-however at a higher cost, doubling the memory footprint on the CPU\cite{SC18ThermalConvection}. 
+however at a higher cost, doubling the memory footprint on the CPU \cite{SC18ThermalConvection}. 
  
 After the first frame has been built, our experience is that smooth interaction
 is possible with all three libraries tested. In fact, ParaView supports acceleration
@@ -579,11 +579,11 @@ We evaluated an implementation of volume rendering provided by the Intel OSPRay 
 a software-based framework which can take remarkable advantage of a multi-threaded
 execution layer. This also fit very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
 
-Our emphasis in creating the scientific visualization shown in the accompanying video \cite{SC18ThermalConvection} was two-fold. 
+Our emphasis in creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
 First, having an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
 deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay is not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The volume rendering framework deployed to analyse our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.  
+The volume rendering framework deployed to analyse our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.
 
 
 %% The Appendices part is started with the command \appendix;
@@ -595,7 +595,7 @@ The volume rendering framework deployed to analyse our large-grid simulations gi
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{SC18ThermalConvection}. 
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
