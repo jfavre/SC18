@@ -65,7 +65,10 @@
 %% \address[label1]{}
 %% \address[label2]{}
 
-\author[CSCS]{Jean M. Favre}
+\author[CSCS]{Jean M. Favre\corref{cor1}}
+\cortext[cor1]{jfavre@cscs.ch}
+
+
 \author[Twente]{Alexander Blass}
 
 \address[CSCS]{Swiss National Supercomputing Center (CSCS), Via Trevano 131, CH-6900 Lugano, Switzerland}
@@ -73,6 +76,8 @@
 J. M. Burgers Center for Fluid Dynamics and MESA+ Research Institute,
 Department of Science and Technology,
 University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
+
+
 
 \begin{abstract}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
@@ -107,7 +112,7 @@ Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Sol
 \begin{figure}[!hbt]
 	\centering
 	\includegraphics[width=\linewidth]{flowfield}% 
-	\caption{\label{fig:flowfield} Instantaneous snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re=6000 $ \cite{bla18}.}
+	\caption{\label{fig:flowfield} Snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re=6000 $ \cite{bla18}.}
 \end{figure}
 
 %% main text
@@ -116,7 +121,7 @@ Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Sol
 
 Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer (1988) \cite{man88} observed that it can contribute a heat increase up to $ \sim 10 ^ \circ $C on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott (1999) \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
 requirements, and the performance of these libraries are discussed.
 
 \section{Numerical Simulations}
@@ -169,12 +174,12 @@ $ u_w $ the wall velocity.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\linewidth]{squaredoverview}% 
-	\caption{\label{fig:overview} Zoomed instantaneous snapshots of temperature fields
+	\caption{\label{fig:overview} Zoomed snapshots of temperature fields
 of a sheared and thermally forced flow transitioning through all flow regimes
-for $ Ra=2.2 \times 10^6 $ and (a) $ Re=0 $, (b) $ Re=2000 $, (c) $ Re=3000 $, (d) $ Re=6000 $.}
+for $ Ra=2.2 \times 10^6 $ and (a) $ Re=0 $, (b) $ Re=2000 $, (c) $ Re=3000 $, (d) $ Re=6000 $, ranging from $ \theta_{min} $ (blue) to $ \theta_{max} $ (red).}
 \end{figure}
 
-In Fig. \ref{fig:overview} we present instantaneous snapshots of temperature
+In Fig. \ref{fig:overview} we present snapshots of temperature
 fields at mid height in different flow regimes. It can be observed that the flow passes from a
 thermally dominated regime with large plumes (Fig. \ref{fig:overview}a) into a
 regime where the mechanical forcing is dominant. Here, large-scale meandering
@@ -185,9 +190,7 @@ further increased, these streaks become instable and start meandering into the
 final flow state (Fig. \ref{fig:overview}c).
 
 In turbulent flows it is very important to research how certain characteristic
-parameters are influenced by the flow. Changing flow structures might have a
-supporting effect or may disrupt a previously transport-favorable flow situation. 
-In thermal convection, the heat transfer is such a parameter, non-dimensionally
+parameters are influenced by the flow. In thermal convection, the heat transfer, non-dimensionally
 defined through the Nusselt number:
 
 \begin{equation} %Nusselt equation
@@ -195,19 +198,21 @@ Nu= \frac{Qh}{\kappa \Delta \theta}
 \label{eqn:nusselt} \\[8pt]
 \end{equation} 
 
-While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and dynamic interaction of turbulent structures with each other.
+is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
+
+While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and the dynamic interaction of turbulent structures with each other.
 In the accompanying video we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
 
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{smallscales_vort}% 
-	\caption{\label{fig:smallscale} Zoom of an instantaneous snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re=6000 $.}
+	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re=6000 $.}
 \end{figure}
 
 It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
 
-The mesh used in our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
+The mesh used in our dataset is made of $ 6912 \times 3456 \times 384 $ grid points.
 The temperature scalar field stored as \it{float32} \rm takes 36 GB of memory, an
 overwhelming size to handle on a normal desktop. Using different parallel programming
 paradigms has enabled us to provide an engaging environment
@@ -221,8 +226,8 @@ or multi-threaded parallelism for software renderings.
 
 \section{Volume Rendering Libraries and Setup}
 
-Visualization of 3D scalar fields is a very mature field. Many techniques are
-available to get some sense of the 3D nature of the data, and its variations
+Visualization of three-dimensional scalar fields is a very mature field. Many techniques are
+available to get some sense of the three-dimensional nature of the data, and its variations
 through the volume. Surface-based renderings with isosurface thresholds or
 slicing planes have a great appeal in that they are easy to use, but volumetric
 renderings, first made popular in medical applications, are also a great fit for
@@ -299,7 +304,7 @@ OpenGL GPU RayCastMapper (left), and with NVIDIA IndeX (right).}
 
 \subsection{NVIDIA IndeX} \label{index}
 
-NVIDIA IndeX \cite{NVIDIAIndeX} is a 3D volumetric visualization SDK developed to enable
+NVIDIA IndeX \cite{NVIDIAIndeX} is a three-dimensional volumetric visualization SDK developed to enable
 the visualization of massive data sets. NVIDIA has worked in tandem with Kitware to
 bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS)
