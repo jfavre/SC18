@@ -277,7 +277,7 @@ over 9 billion voxels can be rendered easily on a single node.
 
 When GPU hardware is present, ParaView's most efficient mapper is a volume
 mapper that performs ray casting on the GPU using vertex and fragment programs.
-The core ray-tracing engines are coded in GLSL and require a graphics driver
+The core ray-tracing algorithms are coded in GLSL and require a graphics driver
 supporting at least OpenGL version 3.2 \cite{ShadersInVTK}. The data is stored
 into a vtkVolumeTexture which manages the OpenGL volume texture, its type and
 internal format. Although this class supports streaming data into separate blocks
@@ -400,8 +400,8 @@ streaming, the NVIDIA IndeX library processes data by chunks. However, it does s
 by bringing volume sub-extents \it{incrementally} \rm into the GPU memory.
 Early volume chunks are rendered properly as long as the GPU memory is not exhausted.
 When memory runs out, late chunks actually corrupt the final image. Our attempts to
-render a 4 billion voxels dataset did not succeed with NVIDIA IndeX. We observe failures
-to allocate $64^3$ voxel cubes and the final images are corrupted.
+render a 4 billion voxels dataset on a single node did not succeed with NVIDIA IndeX.
+We observe failures to allocate $64^3$ voxel cubes and the final images are corrupted.
 %\newline
 
 We summarize in Table \ref{tab:firstframe-tab} the time from when volumetric rendering options
@@ -409,7 +409,7 @@ are enabled, triggering the building of internal structures until the first fram
 In order to measure the memory cost of all three libraries under evaluation on a single node,
 we restricted our test sample to a quarter-size domain of the original grid, i.e., 2.28G voxels
 ($ 1730 \times 3456 \times 384 $), to fit the available GPU RAM. The GPU memory
-usage\footnote{GPU memory usage was sampled with the nvidia-smi diagnostic tool}
+usage\footnote{GPU memory usage is measured with the nvidia-smi diagnostic tool}
 settles at 9.1 GB for ParaView native raycaster, and 12.3 GB for NVIDIA IndeX. 
 
 \begin{table}[htb]
@@ -421,7 +421,7 @@ settles at 9.1 GB for ParaView native raycaster, and 12.3 GB for NVIDIA IndeX.
 
   \begin{tabular}{lccc}
     \hline
-    Rendering library & Startup & pvserver task\\
+    Rendering library & Startup & ParaView task\\
     \hline
     OSPRay & 1.34 secs &  18.4 GB \\
     ParaView GPU Mapper & 6.17 secs &  27.2 GB \\
@@ -447,10 +447,11 @@ the 64 GB RAM on the node and the 16 GB RAM on the GPU are hard limitations.
 The OSPRay-based software rendering is one way to alleviate this problem. We can load the full size
 domain on a single node of  the multi-core partition of Piz Daint with dual-Xeon
 chips and 128 GB of RAM. We measured again the startup cost for the first image
+at full HD resolution (1920x1080 pixels),
 using 72 execution threads and found them to increase linearly with grid dimensions.
 We tested the quarter-size, half-size and the full domain and report the delivery
-of the first image in 1.34, 4.0, and 8.0 seconds, respectively. The associated cost
-in RAM is also linear, at 18.4 GB, 36.8 GB and 73 GB, respectively. Of great interest
+of the first image in 1.07, 1.50, and 2.33 seconds, respectively. The associated cost
+in RAM is also linear, at 18.4 GB, 36.5 GB and 73 GB, respectively. Of great interest
 is OSPRay's management of memory. OSPRay volumes can be stored in two different manners.
 The first variant named \it{shared structured volume} \rm matches ParaView's data layout.
 Version 5.6 of ParaView is the first version where this zero-copy access pattern is used
