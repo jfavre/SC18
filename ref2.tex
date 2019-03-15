@@ -1,0 +1,19 @@
+\documentclass[]{article}
+\usepackage[table]{xcolor}
+\setlength\parindent{0pt}
+
+\title{Response to the comments of Referee \# 2}
+
+
+\begin{document}
+\maketitle
+
+\textbf{Referee:} Motivated by natural phenomena of water movements in the oceans, the paper describes an HPC simulation of sheared thermal convection and its visualization. The computational space is a box in between two plates, one of which is a heating plate and the other one a cooling plate. The simulation examines how turbulent flow evolves when the two plates are moved in opposite directions. Temperature of the two plates and velocity of the two plates can be varied, influencing the characteristics of the resulting flow.  The visualization shows the temperature field via volume rendering, with a transfer function separating hot areas from cool areas.
+
+While the contribution of the paper is neither about the simulation algorithms, nor about a novel visualization method (in fact, similar visualizations have been realized before), the add-on value provided is related to a profound comparison of three volume rendering frameworks (the ParaView built-in GPU-based renderer, the NVIDIA indeX toolkit, and OSPRay) in terms of startup times and frame rates.
+
+Although it does not provide any fundamental new methodology, I consider the paper as being of high practical value to the SciVis as well as the Computational Engineering Science Community, since it gives a clear experience report and points out how we can make a large data volume visualization run as efficiently as possible on the different HPC architectures. As far as I can see, the different options are tested in a technically sound way, and most of the literature relevant to high end volume rendering is cited.\\
+
+\textcolor{blue}{\textbf{Response:} We thank the referee for his/her nice words about our work. }
+
+\end{document}

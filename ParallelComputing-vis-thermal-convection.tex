@@ -28,7 +28,7 @@
 \usepackage{url}
 \usepackage{bm}
 
-%%\usepackage[table]{xcolor} %temporary
+\usepackage[table]{xcolor} %temporary
 
 %% Accepted SC SciVis Showcase submissions will be published in
 %% Parallel Computing.
@@ -82,9 +82,9 @@ University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 \begin{abstract}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
 is covered by water \cite{int14}. Strong currents are transporting warm water around the world
-and therefore not only make life possible, but also allow us to harvest its
+and therefore \textcolor{blue}{do} not only make life possible, but also allow us to harvest its
 power producing energy. Yet, oceans also
-yield a much more deadly side. Floods and tsunamis can easily annihilate whole
+\textcolor{blue}{carry} a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
 linked to the circulation in the ocean due to its large coverage of the earth's surface.
 Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations.
@@ -101,7 +101,7 @@ and a software-only OSPRay-based implementation.
 \begin{keyword}
 
 %% keywords here, in the form: keyword \sep keyword
-Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Solver \sep Direct Numerical Simulation \sep Computational Fluid Dynamics
+Scientific Visualization \sep High Performance Computing \sep Navier-Stokes Solver \sep Direct Numerical Simulation \sep Computational Fluid Dynamics
 
 \end{keyword}
 
@@ -112,21 +112,21 @@ Scientific Visualization \sep High Performance Computing \sep Naviers-Stokes Sol
 \begin{figure}[!hbt]
 	\centering
 	\includegraphics[width=\linewidth]{flowfield}% 
-	\caption{\label{fig:flowfield} Snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re=6000 $ \cite{bla18}.}
+	\caption{\label{fig:flowfield} Snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re_w=6000 $ \cite{bla18}.}
 \end{figure}
 
 %% main text
 \section{Introduction}
 \label{sec:Introduction}
 
-Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer (1988) \cite{man88} observed that it can contribute a heat increase up to $ \sim 10 ^ \circ $C on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott (1999) \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
+Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer \cite{man88} observed that it can contribute \textcolor{blue}{to a heat increase of up to $ \sim 10 ^ \circ $C} on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
 We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
-requirements, and the performance of these libraries are discussed.
+requirements, and the performance of these libraries are discussed. \textcolor{blue}{In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. }
 
-\section{Numerical Simulations}
+\section{Numerical \textcolor{blue}{Procedure}}
 Direct numerical simulations (DNS) were performed with the second-order finite-difference
-code \textit{AFiD} \cite{poe15c} in which the three-dimensional non-dimensional
+code \textit{AFiD} \cite{poe15c}, in which the three-dimensional non-dimensional
 Navier-Stokes equations with the Boussinesq approximation on a staggered grid are solved:
 
 \begin{equation} %NS equation
@@ -148,35 +148,37 @@ We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with stream
 
 The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-For this visualization showcase, data from Blass et al. \cite{bla18} was used, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number (Eqn. \ref{eqn:Ra}), and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number (Eqn. \ref{eqn:Re}), while keeping the Prandtl number (Eqn. \ref{eqn:Pr}), which is the ratio of thermal and viscous viscosity of a fluid, at unity. The equations read:
+For this visualization showcase, data from Blass et al. \cite{bla18} was used, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla18}.} 
 
-\begin{equation} %Ra
-Ra= \frac{\beta gh^3\Delta T}{\kappa\nu}, 
-\label{eqn:Ra} \\[8pt]
-\end{equation}
+%The equations read:
 
-\begin{equation} %Re_w
-Re_w= \frac{hu_w}{\nu},
-\label{eqn:Re} \\[8pt]
-\end{equation}
+%\begin{equation} %Ra
+%Ra= \frac{\beta gh^3\Delta T}{\kappa\nu}, 
+%\label{eqn:Ra} \\[8pt]
+%\end{equation}
+%
+%\begin{equation} %Re_w
+%Re_w= \frac{hu_w}{\nu},
+%\label{eqn:Re} \\[8pt]
+%\end{equation}
+%
+%\begin{equation} %Pr
+%Pr= \frac{\nu}{\kappa},
+%\label{eqn:Pr} \\[8pt]
+%\end{equation}
 
-\begin{equation} %Pr
-Pr= \frac{\nu}{\kappa},
-\label{eqn:Pr} \\[8pt]
-\end{equation}
 
-
-where $ \beta $ is the thermal expansion coefficient of the fluid, $ g $ the
-gravitational acceleration, $ \kappa $ the thermal diffusivity, $ \nu $ the
-kinematic viscosity of the fluid, $ h $ the distance between the plates, and
-$ u_w $ the wall velocity.
+%where $ \beta $ is the thermal expansion coefficient of the fluid, $ g $ the
+%gravitational acceleration, $ \kappa $ the thermal diffusivity, $ \nu $ the
+%kinematic viscosity of the fluid, $ h $ the distance between the plates, and
+%$ u_w $ the wall velocity.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\linewidth]{squaredoverview}% 
 	\caption{\label{fig:overview} Zoomed snapshots of temperature fields
 of a sheared and thermally forced flow transitioning through all flow regimes
-for $ Ra=2.2 \times 10^6 $ and (a) $ Re=0 $, (b) $ Re=2000 $, (c) $ Re=3000 $, (d) $ Re=6000 $, ranging from $ \theta_{min} $ (blue) to $ \theta_{max} $ (red).}
+for $ Ra=2.2 \times 10^6 $ and (a) $ Re_w=0 $, (b) $ Re_w=2000 $, (c) $ Re_w=3000 $, (d) $ Re_w=6000 $, ranging from $ \theta_{min} $ (blue) to $ \theta_{max} $ (red).}
 \end{figure}
 
 In Fig. \ref{fig:overview} we present snapshots of temperature
@@ -191,23 +193,23 @@ final flow state (Fig. \ref{fig:overview}c).
 
 In turbulent flows it is very important to research how certain characteristic
 parameters are influenced by the flow. In thermal convection, the heat transfer, non-dimensionally
-defined through the Nusselt number:
+defined through the Nusselt number \textcolor{blue}{$Nu$}
 
-\begin{equation} %Nusselt equation
-Nu= \frac{Qh}{\kappa \Delta \theta}
-\label{eqn:nusselt} \\[8pt]
-\end{equation} 
+%\begin{equation} %Nusselt equation
+%Nu= \frac{Qh}{\kappa \Delta \theta}
+%\label{eqn:nusselt} \\[8pt]
+%\end{equation} 
 
 is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and the dynamic interaction of turbulent structures with each other.
-In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
+The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
 
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{smallscales_vort}% 
-	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re=6000 $.}
+	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re_w=6000 $.}
 \end{figure}
 
 It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
@@ -555,7 +557,7 @@ on 4 nodes (resp. 8 and 12 nodes). We see that the initialization of the renderi
 has a greater impact than suspected, and that in an \it{in-situ} \rm scenario,
 it would be the singlemost important barrier to performance. The initialization of
 the NVIDIA IndeX has the most significant bottleneck. Discussion with the NVIDIA developers
-is on-going and our hopes is that this will be much improved in future versions of the
+is on-going and our hope is that this will be much improved in future versions of the
 SDK since the library is still a very new development.
 
 \section{Summary and Conclusion}
