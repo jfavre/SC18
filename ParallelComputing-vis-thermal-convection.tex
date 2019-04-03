@@ -245,7 +245,7 @@ We refer readers to other sources \cite{VTKTextbook} to dive more deeply into th
 %\newline
 
 Volume Rendering can be implemented in different manners. ParaView was chosen because it offers a testbed
-for several state-of-the-art implementations which can be applied based on rendering parameters and
+for several state-of-the-art implementations which can be selected based on rendering parameters and
 available hardware.
 %\newline
 
@@ -253,11 +253,11 @@ The largest partition of the Piz Daint supercomputer has nodes equipped
 with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
 Tesla P100 GPU (16 GB RAM, OpenGL driver 396.44). Thus our priority is to evaluate
 the GPU-based implementations.
-ParaView's ``Fixed Point Ray Cast'' mode is also available but we have found its performance far
+ParaView's default installation enables also a software ray caster for rendering volumes but we have found its performance far
 below the other options. The lack of advanced parameter settings in the Graphical
-User Interface (GUI) of ParaView also led us to abandon its evaluation. We tested ParaView's GPU
-ray casting implementation, against IndeX, an NVIDIA library, as well as a CPU-only solution,
-to provide a valid option to users of supercomputers not equipped with GPUs.
+User Interface (GUI) of ParaView also led us to abandon its evaluation. We tested ParaView's native GPU
+ray casting implementation, against IndeX, an NVIDIA library, as well as OSPRay, a software-based library developed by Intel.
+Doing so, provides a valid option to users of supercomputers not equipped with GPUs.
 Our performance evaluation is based on ParaView's benchmarking Python source
 code\footnote{source code found in ./Wrapping/Python/paraview/benchmark/}.
 %newline
@@ -604,7 +604,7 @@ The volume rendering framework deployed to analyse our large-grid simulations gi
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
