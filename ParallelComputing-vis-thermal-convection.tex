@@ -121,29 +121,27 @@ Scientific Visualization \sep High Performance Computing \sep Navier-Stokes Solv
 
 Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer \cite{man88} observed that it can contribute \textcolor{blue}{to a heat increase of up to $ \sim 10 ^ \circ $C} on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView \cite{Ahrens2005} to build a time-dependent volume rendering of thermal convection. The deployment, hardware and software
-
-requirements, and the performance of these libraries are discussed. \textcolor{blue}{In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. }
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView \cite{Ahrens2005} to build a time-dependent volume rendering of thermal convection. The deployment, hardware and software requirements, and the performance of these libraries are discussed. \textcolor{blue}{In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. }
 
 \section{Numerical \textcolor{blue}{Procedure}}
 Direct numerical simulations (DNS) were performed with the second-order finite-difference
 code \textit{AFiD} \cite{poe15c}, in which the three-dimensional non-dimensional
 Navier-Stokes equations with the Boussinesq approximation on a staggered grid are solved:
 
-\begin{equation} %NS equation
-\frac{\partial \boldsymbol{u}}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \boldsymbol{u} =-\bm{\nabla} P + \left(\frac{Pr}{Ra} \right)^{1/2} \nabla^2\boldsymbol{u}+\theta \hat{z}, 
-\label{eqn:NS}
-\end{equation}
-
-\begin{equation} %NS equation
-\bm{\nabla} \bm{\cdot} \boldsymbol{u} =0,
-\label{eqn:div}
-\end{equation}
-
-\begin{equation} %Temp equation
-\frac{\partial \theta}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \theta = \frac{1}{(Pr Ra)^{1/2}} \nabla ^2 \theta.
-\label{eqn:temp} \\[8pt]
-\end{equation}
+%\begin{equation} %NS equation
+%\frac{\partial \boldsymbol{u}}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \boldsymbol{u} =-\bm{\nabla} P + \left(\frac{Pr}{Ra} \right)^{1/2} \nabla^2\boldsymbol{u}+\theta \hat{z}, 
+%\label{eqn:NS}
+%\end{equation}
+%
+%\begin{equation} %NS equation
+%\bm{\nabla} \bm{\cdot} \boldsymbol{u} =0,
+%\label{eqn:div}
+%\end{equation}
+%
+%\begin{equation} %Temp equation
+%\frac{\partial \theta}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \theta = \frac{1}{(Pr Ra)^{1/2}} \nabla ^2 \theta.
+%\label{eqn:temp} \\[8pt]
+%\end{equation}
 
 We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with streamwise, spanwise and wallnormal components. $ \theta $ is the non-dimensional temperature ranging from $ 0 \leq \theta \leq 1 $. The simulations are performed in a computational box with periodic boundary conditions in streamwise and spanwise directions and confined by a heated plate below and a cooled plate on top. The shearing of the flow is implemented by a Couette flow setting where both top and bottom plates of the flow are moved in opposite directions with the speed $ u_w $ keeping the average bulk velocity at zero and therefore minimizing dissipation errors. The domain size is ($ L_x \times L_y \times L_z $) = ($ 9\pi h \times 4\pi h \times h $) using a grid of ($ n_x \times n_y \times n_z $) = ($ 6912 \times 3456 \times 384 $) which is homogeneously distributed in the streamwise and spanwise directions and clustered with an error-function $ \eta(\xi)=erf(2\xi)/erf(2) $ in wallnormal direction.
 
@@ -184,24 +182,26 @@ for $ Ra=2.2 \times 10^6 $ and (a) $ Re_w=0 $, (b) $ Re_w=2000 $, (c) $ Re_w=300
 
 In Fig. \ref{fig:overview} we present snapshots of temperature
 fields at mid height in different flow regimes. It can be observed that the flow passes from a
-thermally dominated regime with large plumes (Fig. \ref{fig:overview}a) into a
+thermally dominated regime with large \textcolor{blue}{thermal convection rolls driving the flow (Fig. \ref{fig:overview}a) into a
 regime where the mechanical forcing is dominant. Here, large-scale meandering
-structures can be observed (Fig. \ref{fig:overview}d). To transition between the
-regimes, the flow has to pass a transitional stage, in which the thermal plumes
+structures can be observed which are driven by the shearing of the top and bottom plates (Fig. \ref{fig:overview}d). To undergo a transition between the
+regimes, the flow has to pass through an intermediate stage, in which the thermal plumes
 get stretched into large streaks (Fig. \ref{fig:overview}b). If the shearing is
-further increased, these streaks become instable and start meandering into the
-final flow state (Fig. \ref{fig:overview}c).
+further increased, these streaks become instable and start meandering in the
+final flow state (Fig. \ref{fig:overview}c,d).}
+
+\textcolor{blue}{The reason for this streaky flow behavior is the addition of a third dimension to originally quasi-two-dimensional flow structures in pure thermal convection. Such thermal convection rolls are driven solely by the thermal difference between the plates. Once the wall shearing is added, the flow starts to strongly move in streamwise direction, which causes the development of streaks.} \\
 
 In turbulent flows it is very important to research how certain characteristic
 parameters are influenced by the flow. In thermal convection, the heat transfer, non-dimensionally
-defined through the Nusselt number \textcolor{blue}{$Nu$}
+defined through the Nusselt number \textcolor{blue}{$Nu$} is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
 
 %\begin{equation} %Nusselt equation
 %Nu= \frac{Qh}{\kappa \Delta \theta}
 %\label{eqn:nusselt} \\[8pt]
 %\end{equation} 
 
-is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
+
 
 While two-dimensional visualizations are very helpful in understanding the behavior of the large-scale structures, they don't show the complete scientific picture. They give a good indication of the flow behavior, but to understand thermal turbulence, it is vital to see the whole flow field and the dynamic interaction of turbulent structures with each other.
 The opportunity to observe the flow evolving and transitioning through different regimes is a great chance to not only statically observe different flow states at fixed locations in space, but to also actually follow the flow on its path to develop thermal plumes, streaks and meandering structures.
@@ -213,7 +213,9 @@ The opportunity to observe the flow evolving and transitioning through different
 	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re_w=6000 $.}
 \end{figure}
 
-It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
+It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. \textcolor{blue}{In the shear dominated regime, which we visualize in the accompanying video \cite{fav18}, we can observe extremely large-scale structures which are caused by a combination of thermal and shear forcing.} The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).
+
+In Nature \\
 
 \section{Volume Rendering Libraries and Setup}
 
