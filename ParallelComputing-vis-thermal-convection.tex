@@ -121,7 +121,8 @@ Scientific Visualization \sep High Performance Computing \sep Navier-Stokes Solv
 
 Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer \cite{man88} observed that it can contribute \textcolor{blue}{to a heat increase of up to $ \sim 10 ^ \circ $C} on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView to build a time-dependent volume rendering of thermal convection. The deployment, the hardware and software
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView {\citeAhrens2005} to build a time-dependent volume rendering of thermal convection. The deployment, hardware and software
+
 requirements, and the performance of these libraries are discussed. \textcolor{blue}{In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. }
 
 \section{Numerical \textcolor{blue}{Procedure}}
@@ -214,48 +215,54 @@ The opportunity to observe the flow evolving and transitioning through different
 
 It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).\\
 
-The mesh used in our dataset is made of $ 6912 \times 3456 \times 384 $ grid points.
-The temperature scalar field stored as \it{float32} \rm takes 36 GB of memory, an
-overwhelming size to handle on a normal desktop. Using different parallel programming
-paradigms has enabled us to provide an engaging environment
-to promote interactive tuning of visualization options and high productivity for movie
-generation. We use ParaView v5.6.0, a world-class, open source, multi-platform data analysis and
+\section{Volume Rendering Libraries and Setup}
+
+We use ParaView v5.6.0, a world-class, open source, multi-platform data analysis and
 visualization application installed on Piz Daint. Piz Daint, a hybrid Cray XC40/XC50 system,
 is the flagship supercomputer of the Swiss National HPC service. We have deployed
 and tested several solutions within ParaView where parallelism is expressed
 at different degrees: data-parallel visualization pipelines with GPU-based renderings,
 or multi-threaded parallelism for software renderings.
 
-\section{Volume Rendering Libraries and Setup}
+The computational domain  used for our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
+The temperature scalar field stored as \it{float32} \rm takes 36 GB of memory, an
+overwhelming size to handle on a normal desktop. Using different parallel programming
+paradigms has enabled us to provide an engaging environment to promote interactive tuning of
+visualization options and high productivity for movie generation.
 
 Visualization of three-dimensional scalar fields is a very mature field. Many techniques are
-available to get some sense of the three-dimensional nature of the data, and its variations
-through the volume. Surface-based renderings with isosurface thresholds or
-slicing planes have a great appeal in that they are easy to use, but volumetric
-renderings, first made popular in medical applications, are also a great fit for
-scalar visualizations, especially in the realm of time-dependent outputs.
+available to make some sense of the three-dimensional nature of the data, and its variations
+throughout the volume. Surface-based renderings with isosurface thresholds or
+slicing planes have a great appeal in that they are easy to use, and provide unambiguous
+representations based on clearly defined numerical values. Volume renderings, early applied
+to medical applications, are also a great fit for scalar visualizations, especially in the
+realm of time-dependent outputs. They are, however, much more difficult to use. Volume rendering is
+based on the principle of converting a 3D scalar field onto an RGB (color) volume and an Opacity volume.
+Transfer functions, often defined in an ad-hoc manner, convert scalar values to colors, and classify
+the data into regions of different opacities. A volume can then appear as clouds with varying density and color.
+Their interpretation remains subjective to the user's taste and practice.
+We refer readers to other sources \cite{VTKTextbook} to dive more deeply into the principles of Volume Rendering.
 %\newline
 
-ParaView's ``Smart'' VolumeMapper is an image mapper
-that will delegate to a specific volume mapper based on rendering parameters and
-available hardware. It is a convenient wrapper to test multiple options.
+Volume Rendering can be implemented in different manners. ParaView was chosen because it offers a testbed
+for several state-of-the-art implementations which can be applied based on rendering parameters and
+available hardware.
 %\newline
 
-The largest partition of the Piz Daint supercomputer nodes has each node equipped
+The largest partition of the Piz Daint supercomputer has nodes equipped
 with one Intel Xeon E5-2690 (12 cores, 64 GB RAM) and one NVIDIA
-Tesla P100 GPU (16 GB RAM, OpenGL driver 396.44), so our priority is to evaluate
+Tesla P100 GPU (16 GB RAM, OpenGL driver 396.44). Thus our priority is to evaluate
 the GPU-based implementations.
 ParaView's ``Fixed Point Ray Cast'' mode is also available but we have found its performance far
 below the other options. The lack of advanced parameter settings in the Graphical
 User Interface (GUI) of ParaView also led us to abandon its evaluation. We tested ParaView's GPU
-ray casting implementation, against an NVIDIA-developed custom library called
-IndeX, and against a CPU-only solution, to give a valid option to users of
-supercomputers not equipped with GPUs.
+ray casting implementation, against IndeX, an NVIDIA library, as well as a CPU-only solution,
+to provide a valid option to users of supercomputers not equipped with GPUs.
 Our performance evaluation is based on ParaView's benchmarking Python source
 code\footnote{source code found in ./Wrapping/Python/paraview/benchmark/}.
 %newline
 
-For all methods used, we have ignored disk-based I/O costs. There is often quite
+In all cases, we have ignored disk-based I/O costs. There is often quite
 a bit of variability when running on a large distributed file system shared by
 hundreds of users. Our motivations are rendering-centered, and two-fold:
 evaluate the memory cost and resources (CPU, GPU) required to get a first image
@@ -265,8 +272,8 @@ any of the three methods proposed. In the evaluation of performance costs, ParaV
 benchmark code enables fully automated testing with a careful management of
 double buffering, by saving images from the back buffer to bypass driver optimizations.
 
-In the two GPU-based methods evaluated, we use an EGL-based rendering layer,
-relaxing the need to have a server-side X-Windows server running on the compute node.
+In the two GPU-based methods evaluated, we use an EGL-based rendering layer \cite{EGL} to
+overcome the need to have a server-side X-Windows server running on the compute node.
 This enables headless, offscreen rendering with GPU acceleration. We note however that although
 the GPUs provide phenomenal rendering power, they are limited by the available memory
 (16 GB on our NVIDIA's Pascal GPUs). For the full size of our simulations outputs,
@@ -283,7 +290,7 @@ over 9 billion voxels can be rendered easily on a single node.
 \subsection{ParaView's GPU Ray Casting} \label{smart}
 
 When GPU hardware is present, ParaView's most efficient mapper is a volume
-mapper that performs ray casting on the GPU using vertex and fragment programs.
+mapper that performs ray casting on the GPU using vertex and fragment programs \cite{KitwareBlog}.
 The core ray-tracing algorithms are coded in GLSL and require a graphics driver
 supporting at least OpenGL version 3.2 \cite{ShadersInVTK}. The data is stored
 into a vtkVolumeTexture which manages the OpenGL volume texture, its type and
@@ -597,7 +604,7 @@ The volume rendering framework deployed to analyse our large-grid simulations gi
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave Demarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa ‎at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
