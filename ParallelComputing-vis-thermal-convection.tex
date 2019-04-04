@@ -524,37 +524,43 @@ We have discussed the fact that the two GPU-based rendering solutions
 are limited by the available GPU memory, since our 9-billion voxels data set will
 not fit on a single GPU. To enable our visualization, we must use a parallel 
 set of nodes. We measure again the initial cost for the first image
-(after all I/O has been done), and also the frame rate achieved in a scripted
+(after all I/O has been done), and also the \textcolor{blue}{average rendering time} in a scripted
 animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results, with runs distributed amongst 4, 8 and 12 compute nodes.
 
 \begin{table}[htb]
   \centering
   \caption{
-    Initial cost for the first frame and frames/sec for the full size domain
+    Initial cost and average rendering time per frame
   }
   \label{tab:parallelgpu-tab}
 
   \begin{tabular}{lccc}
     \hline
-    Rendering library & Startup (secs) & frames/sec\\
+    Rendering library & Startup (secs) & Average (secs)\\
     \hline
-     4-node GPU RayCaster & 8.2 secs &  0.19 \\
-     8-node GPU RayCaster & 4.6 secs &  0.27 \\
-    12-node GPU RayCaster & 2.9 secs &  0.44 \\
+     4-node GPU RayCaster & 8.2 secs &  5.26 \\
+     8-node GPU RayCaster & 4.6 secs &  3.70 \\
+    12-node GPU RayCaster & 2.9 secs &  2.27 \\
     \hline
-     4-node NVIDIA IndeX & 18.9 secs &  0.56\\
-     8-node NVIDIA IndeX & 12.4 secs &  1.48\\
-    12-node NVIDIA IndeX & 9.8 secs &  1.80\\
+     4-node NVIDIA IndeX & 18.9 secs &  1.78\\
+     8-node NVIDIA IndeX & 12.4 secs &  0.67\\
+    12-node NVIDIA IndeX & 9.8 secs &  0.55\\
+    \hline
+    \hline
+     4-node Intel OSPRay & 1.35 secs &  0.70\\
+     8-node Intel OSPRay & 1.18 secs &  0.48\\
+    12-node Intel OSPRay & 1.14 secs &  0.37\\
     \hline
 
   \end{tabular}
 \end{table}
 
+
 As expected, startup times decrease almost linearly with the number of compute nodes,
 since less data is transfered over from CPU memory to GPU memory. Our animation benchmark
 loads a single timestep of data, thus, once the data has migrated to the GPU, there is
 hardly any CPU to GPU communication apart from a single frame buffer image, and
-we see \it{frames per second} \rm rates grow somewhat linearly since there is less workload per GPU. 
+we see \textcolor{blue}{rendering times reduced} somewhat linearly since there is less workload. 
 In a movie production setting where all timestep outputs are read once, rendered once
 and are then discarded, the startup cost of any rendering library needs to be weighted
 against the I/O costs. Although our data I/O statistics show quite a bit of variation
