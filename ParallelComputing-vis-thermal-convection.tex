@@ -530,41 +530,41 @@ scenario, the visualization would most likely use a parallel
 set of nodes. Loading our full-size data, we rounded up our evaluation of all
 three rendering options, by measuring the initial cost
 for the first image (after all I/O has been done), and also the \textcolor{blue}{average rendering time}
-in a scripted animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results,
-with runs distributed among 4, 8 and 12 compute nodes.
+in a scripted animation loop. Fig.~\ref{fig:diagram} summarizes our results,
+with the dataset distributed among 4, 8 and 12 compute nodes.
 
-\begin{table}[htb]
-  \centering
-  \caption{
-    Initial cost and average rendering time per frame
-  }
-  \label{tab:parallelgpu-tab}
-
-  \begin{tabular}{lccc}
-    \hline
-    Rendering library & Startup (secs) & Average (secs)\\
-    \hline
-     4-node GPU RayCaster & 8.2 secs &  5.26 secs\\
-     8-node GPU RayCaster & 4.6 secs &  3.70 secs\\
-    12-node GPU RayCaster & 2.9 secs &  2.27 secs\\
-    \hline
-     4-node NVIDIA IndeX & 18.9 secs &  1.78 secs\\
-     8-node NVIDIA IndeX & 12.4 secs &  0.67 secs\\
-    12-node NVIDIA IndeX & 9.8 secs &  0.55 secs\\
-    \hline
-    \hline
-     4-node Intel OSPRay & 1.35 secs &  0.70 secs\\
-     8-node Intel OSPRay & 1.18 secs &  0.48 secs\\
-    12-node Intel OSPRay & 1.14 secs &  0.37 secs\\
-    \hline
-
-  \end{tabular}
-\end{table}
+%%\begin{table}[htb]
+%%  \centering
+%%  \caption{
+%%    Initial cost and average rendering time per frame
+%%  }
+%%  \label{tab:parallelgpu-tab}
+%%
+%%  \begin{tabular}{lccc}
+%%    \hline
+%%    Rendering library & Startup (secs) & Average (secs)\\
+%%    \hline
+%%     4-node GPU RayCaster & 8.2 secs &  5.26 secs\\
+%%     8-node GPU RayCaster & 4.6 secs &  3.70 secs\\
+%%    12-node GPU RayCaster & 2.9 secs &  2.27 secs\\
+%%    \hline
+%%     4-node NVIDIA IndeX & 18.9 secs &  1.78 secs\\
+%%     8-node NVIDIA IndeX & 12.4 secs &  0.67 secs\\
+%%    12-node NVIDIA IndeX & 9.8 secs &  0.55 secs\\
+%%    \hline
+%%    \hline
+%%     4-node Intel OSPRay & 1.35 secs &  0.70 secs\\
+%%     8-node Intel OSPRay & 1.18 secs &  0.48 secs\\
+%%    12-node Intel OSPRay & 1.14 secs &  0.37 secs\\
+%%    \hline
+%%
+%%  \end{tabular}
+%%\end{table}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{bardiagram}% 
-	\caption{\label{fig:diagram} Overview of initial cost and avering rendering time per frame.}
+	\caption{\label{fig:diagram} Overview of initial cost and average rendering time per frame.}
 \end{figure}
 
 
@@ -588,7 +588,10 @@ are on-going and our \textcolor{blue}{hope} is that this will be improved in fut
 SDK since the library is still \textcolor{blue}{in early} development. We comment
 here that the parallel execution of the OSPRay-based volume rendering was made possible
 by using yet another ParaView mode, letting the OSPRay library take full control
-of the overal scene and parallel frame compositing. 
+of the overal scene and parallel frame compositing. Finally, we highlight the fact
+that the OSPRay average rendering times per frame in our animation are all under one second,
+while it takes a minimum of 8 compute nodes using the NVIDIA IndeX solution. This level of interactivity
+can be satisfactory during the prototyping phase of a visualization.
 
 \section{Summary and Conclusion}
 
