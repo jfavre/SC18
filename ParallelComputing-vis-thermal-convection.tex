@@ -92,7 +92,7 @@ To support these very large scale numerical simulations and enable the scientist
 we deploy an interactive visualization framework to study sheared thermal convection.
 The visualizations are based on volume renderings of the temperature field.
 To address the needs of supercomputer users with different hardware and software resources,
-we evaluate different implementations supported in the ParaView \cite{Ahrens2005} environment:
+we evaluate different \textcolor{blue}{volume rendering} implementations supported in the ParaView \cite{Ahrens2005} environment:
 two GPU-based solutions with Kitware's native volume mapper or NVIDIA's IndeX library,
 and a software-only OSPRay-based implementation.
 
@@ -147,7 +147,7 @@ We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with stream
 
 The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-For this visualization showcase, data from Blass et al. \cite{bla18} was used, where a parameter study over different input parameters was conducted to study the influence of such to the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla18}.} 
+\textcolor{blue}{We used} data from Blass et al. \cite{bla18} \textcolor{blue}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{blue}{study their influence on} the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla18}.} 
 
 %The equations read:
 
@@ -319,7 +319,7 @@ bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS)
 and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
 plugin v2.2 with the core library NVIDIA IndeX 2.0.1 (build 305900.4300.3163).
-NVIDIA IndeX Accelerated Compute (XAC) interface integrates the core surface
+\textcolor{blue}{The} NVIDIA IndeX Accelerated Compute (XAC) interface integrates the core surface
 and volume sampling programs written in CUDA \cite{SC18IndexShowcase}.
 For this showcase, we have used the generic programs provided by IndeX, without custom programming.
 In Fig. \ref{fig:gpucloseup} we show side-by-side renderings done with the
@@ -516,16 +516,22 @@ our average rendering time per frame for 300 frames of navigation.
   \end{tabular}
 \end{table}
 
-Our compute nodes are featuring two sockets with eighteen cores each. We note the clear benefit of using hyper-threading to spawn up to seventy-two threads for an increased throughput. We also note that increasing frame buffer resolution to very large sizes is not a showstopper. 
+Our compute nodes are featuring two sockets with eighteen cores each. We note
+the clear benefit of using hyper-threading to spawn up to seventy-two threads
+for an increased throughput. We also note that increasing frame buffer resolution
+to very large sizes is not a showstopper. 
 
 \subsection{Rendering the Full Domain in Parallel}
 
-We have discussed the fact that the two GPU-based rendering solutions
-are limited by the available GPU memory, since our 9-billion voxels data set will
-not fit on a single GPU. To enable our visualization, we must use a parallel 
-set of nodes. We measure again the initial cost for the first image
-(after all I/O has been done), and also the \textcolor{blue}{average rendering time} in a scripted
-animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results, with runs distributed amongst 4, 8 and 12 compute nodes.
+In a post-processing scenario, we have seen that the two GPU-based
+rendering solutions are limited by the available GPU memory, since our 9-billion
+voxels data set will not fit on a single GPU. Likewise, in an \it{in-situ} \rm
+scenario, the visualization would most likely use a parallel 
+set of nodes. Loading our full-size data, we rounded up our evaluation of all
+three rendering options, by measuring the initial cost
+for the first image (after all I/O has been done), and also the \textcolor{blue}{average rendering time}
+in a scripted animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results,
+with runs distributed among 4, 8 and 12 compute nodes.
 
 \begin{table}[htb]
   \centering
@@ -556,22 +562,27 @@ animation loop. Table \ref{tab:parallelgpu-tab} summarizes our results, with run
 \end{table}
 
 
-As expected, startup times decrease almost linearly with the number of compute nodes,
-since less data is transfered over from CPU memory to GPU memory. Our animation benchmark
-loads a single timestep of data, thus, once the data has migrated to the GPU, there is
-hardly any CPU to GPU communication apart from a single frame buffer image, and
-we see \textcolor{blue}{rendering times reduced} somewhat linearly since there is less workload. 
+As expected, startup times decrease almost linearly with the number of compute nodes.
+For the GPU-based methods, less data is transferred over from CPU memory to GPU memory.
+Our animation benchmark loads a single timestep of data, thus, once the data has migrated to the GPU, there is
+hardly any CPU to GPU communication apart from a single frame buffer image.
+Likewise for the CPU-based implementation, where the build-up of the ray-tracing
+acceleration structures is directly proportional to the size of the grid.
+We see \textcolor{blue}{rendering times reduced} somewhat linearly since there is less workload. 
 In a movie production setting where all timestep outputs are read once, rendered once
 and are then discarded, the startup cost of any rendering library needs to be weighted
 against the I/O costs. Although our data I/O statistics show quite a bit of variation
 because of the high load of our multi user system with over 5000 compute nodes,
-our simulation data are read, \it{in average}\rm, in about 32 seconds (resp. 16, and 25 seconds)
-on 4 nodes (resp. 8 and 12 nodes). We see that the initialization of the rendering sub-system
+our simulation data are read, \it{in average}\rm, in about 32 seconds \textcolor{blue}{(resp.~25, and 16 seconds)}
+on 4 nodes (resp.~8 and 12 nodes). We see that the initialization of the rendering sub-system
 has a greater impact than suspected, and that in an \it{in-situ} \rm scenario,
 it would be the singlemost important barrier to performance. The initialization of
-the NVIDIA IndeX has the most significant bottleneck. Discussion with the NVIDIA developers
-is on-going and our hope is that this will be much improved in future versions of the
-SDK since the library is still a very new development.
+the NVIDIA IndeX has the most significant bottleneck. Discussions with NVIDIA
+are on-going and our \textcolor{blue}{hope} is that this will be improved in future versions of the
+SDK since the library is still \textcolor{blue}{in early} development. We comment
+here that the parallel execution of the OSPRay-based volume rendering was made possible
+by using yet another ParaView mode, letting the OSPRay library take full control
+of the overal scene and parallel frame compositing. 
 
 \section{Summary and Conclusion}
 
@@ -595,10 +606,10 @@ a software-based framework which can take remarkable advantage of a multi-thread
 execution layer. This also fit very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
 
 Our emphasis in creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
-First, having an interactive environment enabling us to prototype the visualization with large scale data. The edition of color and opacity transfer functions is the most demanding step in
+First, having an interactive environment enabling us to prototype the visualization with large scale data. The \textcolor{blue}{editing} of color and opacity transfer functions is the most demanding step in
 deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay is not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The volume rendering framework deployed to analyse our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.
+The volume rendering framework deployed to analy\textcolor{blue}{z}e our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.
 
 
 %% The Appendices part is started with the command \appendix;
