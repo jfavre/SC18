@@ -544,22 +544,28 @@ with runs distributed among 4, 8 and 12 compute nodes.
     \hline
     Rendering library & Startup (secs) & Average (secs)\\
     \hline
-     4-node GPU RayCaster & 8.2 secs &  5.26 \\
-     8-node GPU RayCaster & 4.6 secs &  3.70 \\
-    12-node GPU RayCaster & 2.9 secs &  2.27 \\
+     4-node GPU RayCaster & 8.2 secs &  5.26 secs\\
+     8-node GPU RayCaster & 4.6 secs &  3.70 secs\\
+    12-node GPU RayCaster & 2.9 secs &  2.27 secs\\
     \hline
-     4-node NVIDIA IndeX & 18.9 secs &  1.78\\
-     8-node NVIDIA IndeX & 12.4 secs &  0.67\\
-    12-node NVIDIA IndeX & 9.8 secs &  0.55\\
+     4-node NVIDIA IndeX & 18.9 secs &  1.78 secs\\
+     8-node NVIDIA IndeX & 12.4 secs &  0.67 secs\\
+    12-node NVIDIA IndeX & 9.8 secs &  0.55 secs\\
     \hline
     \hline
-     4-node Intel OSPRay & 1.35 secs &  0.70\\
-     8-node Intel OSPRay & 1.18 secs &  0.48\\
-    12-node Intel OSPRay & 1.14 secs &  0.37\\
+     4-node Intel OSPRay & 1.35 secs &  0.70 secs\\
+     8-node Intel OSPRay & 1.18 secs &  0.48 secs\\
+    12-node Intel OSPRay & 1.14 secs &  0.37 secs\\
     \hline
 
   \end{tabular}
 \end{table}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{bardiagram}% 
+	\caption{\label{fig:diagram} Overview of initial cost and avering rendering time per frame.}
+\end{figure}
 
 
 As expected, startup times decrease almost linearly with the number of compute nodes.
