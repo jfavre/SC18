@@ -597,28 +597,28 @@ can be satisfactory during the prototyping phase of a visualization.
 
 We have discussed three implementations of volume rendering for a thermal convection
 simulation output of substantial size. Our time-dependent output is stored as a
-\it{float32} \rm array of 36G bytes per timestep. This is a non-trivial size for the most common
+\it{float32} \rm array of \textcolor{blue}{36GB} per timestep. This is a non-trivial size for the most common
 GPUs. This leaves the scientist with two options: 1) use a data-parallel visualization
 application with GPU-assisted rendering, or 2) use a \it{software-only} \rm
 visualization environment which can fit on compute nodes where large memory
-banks are easily found. Our choice was to deploy a single application, the open-source
-ParaView, thanks to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
+banks are \textcolor{blue}{usually} found. Our choice was to deploy a single application, the open-source
+ParaView, \textcolor{blue}{due} to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
 driven by fully automatized python scripts and a benchmarking suite of tools
 available in ParaView itself, enabled us to confront all possible implementations with reduced variability.
 %\newline
 
-We tested two GPU-based rendering options. We first used ParaView's native volume rendering which has proved to offer the best compromise between startup time, and interactive performance; We also tested an alternative solution based on a new library in current development by NVIDIA. In our current setup, the IndeX library offers superior interactive rendering, however at non-negligible initialization costs.
+We tested two GPU-based rendering options. We first used ParaView's native volume rendering which has proved to offer the best compromise between startup time, and interactive performance; We also tested an alternative solution based on a new library in development by NVIDIA. In our current setup, the IndeX library offers superior interactive rendering, however at non-negligible initialization costs.
 %\newline
 
 We evaluated an implementation of volume rendering provided by the Intel OSPRay library,
 a software-based framework which can take remarkable advantage of a multi-threaded
-execution layer. This also fit very well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience is of interest for quite a few computer platforms around the world where graphics hardware is not available. 
+execution layer. This also \textcolor{blue}{fits} well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience\textcolor{blue}{s are of interest for several} computer platforms around the world where graphics hardware is not available. 
 
-Our emphasis in creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
+Our emphasis \textcolor{blue}{o}n creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
 First, having an interactive environment enabling us to prototype the visualization with large scale data. The \textcolor{blue}{editing} of color and opacity transfer functions is the most demanding step in
-deriving the proper visualization, and we were able to provide an interactive setup using either hardware-based, or software-based volume rendering. Dealing with long time-dependent simulations outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was primordial for a quick turn-around time. However, we were unable to mix the two parallel processing paradigms we tested. The ability to get multi-threaded rendering with OSPRay is not available in conjunction with MPI-based ParaView's batch execution for faster I/O. The compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
+deriving the proper visualization, and we were able to provide an interactive setup using either \textcolor{blue}{hardware-, or software-based} volume rendering. Dealing with long time-dependent simulation outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was \textcolor{blue}{pivotal} for a quick turn-around time. The OSPRay-based implementation had the best performance in both initialization and average rendering time, but suffered from some parallel image compositing artifacts at inter-process boundaries. Given the very high spatial resolution of our grid, these artifacts are only visible at extreme zooming in the vicinity of ghost-cells between MPI-distributed data. Nonetheless, to ensure the best visual quality, the compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The volume rendering framework deployed to analy\textcolor{blue}{z}e our large-grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with very complex impact to our future. Further, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics. Going forward, it is the scientific duty of our community to further develop this approach and overcome more and more computational limitations on the pursuit to better understand the nature of our planet.
+The volume rendering framework deployed to analy\textcolor{blue}{z}e our large grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with \textcolor{blue}{far reaching consequences}. Further\textcolor{blue}{more}, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics.
 
 
 %% The Appendices part is started with the command \appendix;
