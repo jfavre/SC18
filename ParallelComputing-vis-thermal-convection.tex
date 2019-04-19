@@ -77,16 +77,13 @@ J. M. Burgers Center for Fluid Dynamics and MESA+ Research Institute,
 Department of Science and Technology,
 University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 
-
-
 \begin{abstract}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
-is covered by water \cite{int14}. Strong currents are transporting warm water around the world
-and therefore \textcolor{blue}{do} not only make life possible, but also allow us to harvest its
+is covered by water \cite{int14}. Strong currents are transporting warm water around the world making life possible, and allowing us to harvest its
 power producing energy. Yet, oceans also
 \textcolor{blue}{carry} a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
-linked to the circulation in the ocean due to its large coverage of the earth's surface.
+linked to the \textcolor{blue}{currents} in the ocean due to its large coverage of the earth's surface.
 Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations.
 To support these very large scale numerical simulations and enable the scientists to interpret their output,
 we deploy an interactive visualization framework to study sheared thermal convection.
@@ -94,7 +91,7 @@ The visualizations are based on volume renderings of the temperature field.
 To address the needs of supercomputer users with different hardware and software resources,
 we evaluate different \textcolor{blue}{volume rendering} implementations supported in the ParaView \cite{Ahrens2005} environment:
 two GPU-based solutions with Kitware's native volume mapper or NVIDIA's IndeX library,
-and a software-only OSPRay-based implementation.
+and a CPU-only Intel OSPRay-based implementation.
 
 \end{abstract}
 
@@ -123,10 +120,10 @@ Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our 
 
 We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView \cite{Ahrens2005} to build a time-dependent volume rendering of thermal convection. The deployment, hardware and software requirements, and the performance of these libraries are discussed. \textcolor{blue}{In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters. }
 
-\section{Numerical \textcolor{blue}{Procedure}}
-Direct numerical simulations (DNS) were performed with the second-order finite-difference
+\section{Numerical \textcolor{blue}{Simulations for Sheared Thermal Convection}}
+\textcolor{blue}{The} direct numerical simulations (DNS) were performed with the second-order finite-difference
 code \textit{AFiD} \cite{poe15c}, in which the three-dimensional non-dimensional
-Navier-Stokes equations with the Boussinesq approximation on a staggered grid are solved:
+Navier-Stokes equations with the Boussinesq approximation are solved on a staggered grid.
 
 %\begin{equation} %NS equation
 %\frac{\partial \boldsymbol{u}}{\partial t} + \boldsymbol{u} \bm{\cdot} \bm{\nabla} \boldsymbol{u} =-\bm{\nabla} P + \left(\frac{Pr}{Ra} \right)^{1/2} \nabla^2\boldsymbol{u}+\theta \hat{z}, 
@@ -221,7 +218,7 @@ We use ParaView v5.6.0, a world-class, open source, multi-platform data analysis
 visualization application installed on Piz Daint. Piz Daint, a hybrid Cray XC40/XC50 system,
 is the flagship supercomputer of the Swiss National HPC service. We have deployed
 and tested several solutions within ParaView where parallelism is expressed
-at different degrees: data-parallel visualization pipelines with GPU-based renderings,
+at different degrees: data-parallel visualization pipelines with GPU-based renderings
 or multi-threaded parallelism for software renderings.
 
 The computational domain  used for our simulations is made of $ 6912 \times 3456 \times 384 $ grid points.
@@ -270,8 +267,11 @@ on the screen, and see if color/opacity transfer
 function editing, as well as other image tuning can be done in real time, using
 any of the three methods proposed. In the evaluation of performance costs, ParaView's
 benchmark code enables fully automated testing with a careful management of
-double buffering, by saving images from the back buffer to bypass driver optimizations.
-
+double buffering, turning off all rendering optimizations designed to accelerate
+interactive viewing, and forcing full-feature rendering before saving images to disk.
+\textcolor{blue}{Our evaluation of volume rendering libraries was motivated by a
+showcase submission\cite{fav18} at the 2018 International Conference
+for High Performance Computing, Networking, Storage and Analysis.}
 In the two GPU-based methods evaluated, we use an EGL-based rendering layer \cite{EGL} to
 overcome the need to have a server-side X-Windows server running on the compute node.
 This enables headless, offscreen rendering with GPU acceleration. We note however that although
@@ -281,11 +281,10 @@ we are actually forced to use data-parallel pipelines on multiple nodes to use
 the aggregate memory of the different GPUs.
 %\newline
 
-Our third option, however, uses OSPRay and software rendering and does not suffer
-from a memory hard limit. Compute nodes are easily and often found with large memory
-banks. We use Piz Daint's high memory nodes with 128 GB of RAM, where our mesh of
-over 9 billion voxels can be rendered easily on a single node.
-
+Our third option, uses Intel OSPRay and software rendering. HPC compute nodes usually
+have more memory than their GPU counterparts. We use Piz Daint's high memory nodes
+with 128 GB of RAM, where our \textcolor{blue}{grid} of over 9 billion voxels can be fit
+easily on a single node.
 
 \subsection{ParaView's GPU Ray Casting} \label{smart}
 
@@ -300,9 +299,10 @@ a performance trade-off, artificially going over the fixed GPU memory limit.
 Block streaming, sometimes called data bricking may also suffer from artifacts at
 the block boundaries where gradient computations are done to support shading.
 ParaView's OpenGL VolumeRayCastMapper binds the 32-bit float scalar field array
-to a three-dimensional texture image of type GL\_FLOAT with a call to glTexImage3D().
-An explicit Texture object is created, transfering data from CPU memory to GPU memory.
-The GPU's memory and the CPU to GPU transfer bus set the maximum achievable performance.
+to a three-dimensional texture image with a call to glTexImage3D().
+An explicit Texture object is created, transfering data from Host memory to GPU memory.
+The maximum achievable performance will be proportional to the total amount of GPU memory,
+and to the transfer bandwith over our high speed PCIe3 serial bus connecting the Host to the GPU device.
 
 \begin{figure}
 	\centering
@@ -313,18 +313,19 @@ OpenGL GPU RayCastMapper (left), and with NVIDIA IndeX (right).}
 
 \subsection{NVIDIA IndeX} \label{index}
 
-NVIDIA IndeX \cite{NVIDIAIndeX} is a three-dimensional volumetric visualization SDK developed to enable
-the visualization of massive data sets. NVIDIA has worked in tandem with Kitware to
+NVIDIA IndeX \cite{NVIDIAIndeX} is a three-dimensional visualization SDK developed to enable
+volume rendering of massive data sets. NVIDIA has worked in tandem with Kitware to
 bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS)
 and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
-plugin v2.2 with the core library NVIDIA IndeX 2.0.1 (build 305900.4300.3163).
+plugin v2.2 with the core library NVIDIA IndeX 2.0.1.
 \textcolor{blue}{The} NVIDIA IndeX Accelerated Compute (XAC) interface integrates the core surface
 and volume sampling programs written in CUDA \cite{SC18IndexShowcase}.
-For this showcase, we have used the generic programs provided by IndeX, without custom programming.
-In Fig. \ref{fig:gpucloseup} we show side-by-side renderings done with the
-two GPU-based libraries. The NVIDIA IndeX rendering (right) is done with identical
-color and opacity transfer functions and sampling rates as used in \ref{smart}. ParaView's
+For this case, we have used the generic programs provided by IndeX, without custom programming.
+In Fig.~\ref{fig:gpucloseup} we show side-by-side renderings done with the
+two GPU-based libraries, \textcolor{blue}{to demonstrate that their produce equivalent images.
+The ParaView Graphical user Interface insures that both implementations use identical
+color and opacity transfer functions and sampling rates.} ParaView's
 GPU Ray Casting image (left) is used as reference. Differences of
 illumination are barely noticable to the human eye.
 
@@ -332,9 +333,8 @@ illumination are barely noticable to the human eye.
 
 OSPRay \cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
 shading effects, large models and non-polygonal primitives. OSPRay can distributes 
-``bricks'' of data as well as ``tiles'' of the framebuffer, although in our current
-implementation, we only use brick subdivisions. The Texas Advanced Computing Center
-has developed a ParaView plugin which enables us to test the possibility of
+``bricks'' of data as well as ``tiles'' of the framebuffer, although in \textcolor{blue}{our case, we use brick subdivisions only}. The Texas Advanced Computing Center
+has developed a ParaView plugin \textcolor{blue}{that} enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
@@ -347,10 +347,11 @@ The emphasis is no more on data parallelism, but rather on multi-threaded execut
 A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
 OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
 OSPRay v1.7.2 library to provide a very efficient multi-threaded execution path
-taking advantage of Piz Daint's alternate partition of compute nodes. These nodes
-are built with two Intel Broadwell CPUs (2x18 cores and 64/128 GB RAM). We run
-ParaView with SLURM's option ``--cpus-per-task=72 --ntasks-per-core=2'', effectively
-taking full advantage of the multi-threading exposed by the LLVM and OSPRay libraries. 
+taking advantage of Piz Daint's \textcolor{blue}{second} partition of compute nodes. These nodes
+are built with two Intel Broadwell CPUs (2x18 cores and 64/128 GB RAM). \textcolor{blue}{Our
+cluster management and job scheduling system} SLURM provides the specific scheduling options
+``\texttt{--}cpus-per-task=72 \texttt{--}ntasks-per-core=2'' to effectively
+take full advantage of the multi-threading exposed by the LLVM and OSPRay libraries. 
 
 \subsection{Parallel Image Compositing}
 
@@ -374,7 +375,7 @@ image compositor.
 
 In visualizing the temperature field, we seek to highlight the turbulence which
 is best shown by clearly differentiating between cold and hot regions to see how
-they interact with each other, as seen in Fig. \ref{fig:zoom}. Our movie animation
+they interact with each other, as seen in Fig.~\ref{fig:zoom}. Our movie animation
 shows an initial phase where region of blue tint is superposed on top of the hotter
 region. Plumes emerging from the bottom and mixing into the cold regions highlight
 this phenomenon.
@@ -383,7 +384,7 @@ this phenomenon.
 
 When presented with multiple visualizations including different illumination and
 shading, we preferred the renderings which emphasize the
-amorphous nature of the field data. As can be seen in Fig. \ref{fig:shadings},
+amorphous nature of the field data. As can be seen in Fig.~\ref{fig:shadings},
 shading based on gradient estimation offers little improvement because our data
 does not have strong gradients, and the use of shadows which at first might seem
 more appealing, produces images with a strong \it{surface-like} \rm look, which
@@ -399,7 +400,7 @@ estimation (left), and with OSPRay-enabled shadows (right).}
 
 \subsection{GPU-based rendering on a Single Node}
 
-Volumetric rendering at this scale of grid has a non-significant cost which we
+Volumetric rendering of high resolution grids has a non-significant cost which we
 briefly document here. Creating the first frame after data has been read in memory,
  i.e., the startup cost has a great impact in having users adopt a particular implementation.
 In a \it{post-hoc} \rm visualization, data would be read from disk; in an \it{in-situ} \rm
@@ -483,14 +484,13 @@ Color and opacity transfer functions editing is also interactive and very intuit
 
 Movie quality renderings on the other hand are done with all level-of-details
 optimizations turned off and we tested the rendering speed of that particular
-mode, in a batch production test.
+mode in a batch production test.
 We created an OSPRay-based benchmark test to mimic a navigation fly-through in
 a full resolution domain, starting from an overall view of the full grid, zooming in, rotating
-the view-point, and finally zooming in to immerse the viewer in the volume. From
-an initial pixel coverage of about 80\%, we then move into the scene such that
+the view-point, and finally zooming in to immerse the viewer in the volume. Our initial view-point has some regions of screen-space empty, where rendering costs at each pixel are negligible. We then move quickly into the scene such that
 the viewport is completely covered by active pixels, i.e., all pixel rays hit the volume.
 Using the OSPRay library which is a CPU-only implementation, rendering times are of course
-dependent on frame buffer pixel resolution. We rendered this short movie segment
+dependent on frame buffer resolution. We rendered this short movie segment
 at three different pixel resolution, WXGA (1280x800 pixels), Full HD (1920x1080 pixels)
 and 4K Ultra HD (3840x2160 pixels), to evaluate the impact of pixel resolution on rendering costs.
 We also evaluated the use of hyper-threading to further boost performance.
@@ -569,21 +569,21 @@ with the dataset distributed among 4, 8 and 12 compute nodes.
 
 
 As expected, startup times decrease almost linearly with the number of compute nodes.
-For the GPU-based methods, less data is transferred over from CPU memory to GPU memory.
+For the GPU-based methods, less data is transferred from CPU memory to GPU memory.
 Our animation benchmark loads a single timestep of data, thus, once the data has migrated to the GPU, there is
 hardly any CPU to GPU communication apart from a single frame buffer image.
-Likewise for the CPU-based implementation, where the build-up of the ray-tracing
-acceleration structures is directly proportional to the size of the grid.
+For the CPU-based implementation, the build-up of the ray-tracing
+acceleration structures takes just over one second so there is less difference across the few tests executed.
 We see \textcolor{blue}{rendering times reduced} somewhat linearly since there is less workload. 
 In a movie production setting where all timestep outputs are read once, rendered once
-and are then discarded, the startup cost of any rendering library needs to be weighted
+and then discarded, the startup cost of any rendering library needs to be weighted
 against the I/O costs. Although our data I/O statistics show quite a bit of variation
 because of the high load of our multi user system with over 5000 compute nodes,
 our simulation data are read, \it{in average}\rm, in about 32 seconds \textcolor{blue}{(resp.~25, and 16 seconds)}
 on 4 nodes (resp.~8 and 12 nodes). We see that the initialization of the rendering sub-system
 has a greater impact than suspected, and that in an \it{in-situ} \rm scenario,
 it would be the singlemost important barrier to performance. The initialization of
-the NVIDIA IndeX has the most significant bottleneck. Discussions with NVIDIA
+the NVIDIA IndeX \textcolor{blue}{is} the most significant bottleneck. Discussions with NVIDIA
 are on-going and our \textcolor{blue}{hope} is that this will be improved in future versions of the
 SDK since the library is still \textcolor{blue}{in early} development. We comment
 here that the parallel execution of the OSPRay-based volume rendering was made possible
@@ -618,7 +618,7 @@ Our emphasis \textcolor{blue}{o}n creating the scientific visualization shown in
 First, having an interactive environment enabling us to prototype the visualization with large scale data. The \textcolor{blue}{editing} of color and opacity transfer functions is the most demanding step in
 deriving the proper visualization, and we were able to provide an interactive setup using either \textcolor{blue}{hardware-, or software-based} volume rendering. Dealing with long time-dependent simulation outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was \textcolor{blue}{pivotal} for a quick turn-around time. The OSPRay-based implementation had the best performance in both initialization and average rendering time, but suffered from some parallel image compositing artifacts at inter-process boundaries. Given the very high spatial resolution of our grid, these artifacts are only visible at extreme zooming in the vicinity of ghost-cells between MPI-distributed data. Nonetheless, to ensure the best visual quality, the compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The volume rendering framework deployed to analy\textcolor{blue}{z}e our large grid simulations gives us a unique chance to observe sheared thermal convection in a very simple system with \textcolor{blue}{far reaching consequences}. Further\textcolor{blue}{more}, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics.
+The volume rendering benchmarking platform deployed to analy\textcolor{blue}{z}e our large grid simulations provides a unique chance to observe sheared thermal convection in a very simple system with \textcolor{blue}{far reaching consequences}. Further\textcolor{blue}{more}, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics.
 
 
 %% The Appendices part is started with the command \appendix;
@@ -630,7 +630,7 @@ The volume rendering framework deployed to analy\textcolor{blue}{z}e our large g
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We would also like to acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. The authors thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. We thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We are greatful to the reviewers of our manuscript who provided critical reading and motivated clarifications we have added. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
