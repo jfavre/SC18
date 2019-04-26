@@ -109,7 +109,7 @@ Scientific Visualization \sep High Performance Computing \sep Navier-Stokes Solv
 \begin{figure}[!hbt]
 	\centering
 	\includegraphics[width=\linewidth]{flowfield}% 
-	\caption{\label{fig:flowfield} Snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re_w=6000 $ \cite{bla18}.}
+	\caption{\label{fig:flowfield} Snapshot of the three-dimensional temperature field of sheared thermal convection at $ Ra=4.6 \times 10^6 $ and $ Re_w=6000 $ \cite{bla19}.}
 \end{figure}
 
 %% main text
@@ -144,7 +144,7 @@ We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with stream
 
 The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-\textcolor{blue}{We used} data from Blass et al. \cite{bla18} \textcolor{blue}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{blue}{study their influence on} the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla18}.} 
+\textcolor{blue}{We used} data from Blass et al. \cite{bla19} \textcolor{blue}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{blue}{study their influence on} the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla19}.} 
 
 %The equations read:
 
@@ -630,7 +630,7 @@ The volume rendering benchmarking platform deployed to analy\textcolor{blue}{z}e
 
 \section*{Acknowledgments}
 
-Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713 and s802. We acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. We thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We are greatful to the reviewers of our manuscript who provided critical reading and motivated clarifications we have added. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
+Alexander Blass was financially supported by the Dutch Organization for Scientific Research (NWO-I) and conducted his simulations at the Swiss National Supercomputing Center, under compute allocations s713, s802, and s874. We acknowledge the support from the Dutch national e-infrastructure of SURFsara, a subsidiary of the SURF cooperation, and the Priority Programme SPP 1881 Turbulent Superstructures of the Deutsche Forschungsgemeinschaft. We thank the ParaView development team at Kitware, USA, for fruitful discussions and motivational material. Dave DeMarle has been particularly helpful in discussion related to the OSPRay plugin. Mahendra Roopa at NVIDIA has also been extremely receptive to our feedback and instrumental in helping us get the best of the IndeX library in a multi-GPU setting. We are greatful to the reviewers of our manuscript who provided critical reading and motivated clarifications we have added. We also would like to thank Paul Melis from SURFsara for valuable input to our video \cite{fav18}. 
 
 %% Use the elsarticle-num bibliography style.
 \section*{References}
