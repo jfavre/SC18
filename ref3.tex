@@ -9,201 +9,25 @@
 \maketitle
 \textbf{Referee:} This manuscript presents a study of two major different approaches, using CPUs or GPUs, for rendering large time-varying volumetric data from HPC simulations. The simulation scenario is from oceanic sheared thermal convection between cold and warm opposing sides, water surface and seafloor. The visualizations were part of the Super Computing 2018 visualization contest. As such, the manuscript is a write-up of the work conducted and the experiences and results.
 The resulting visualizations are intriguing and provide valuable insights for the scientific community and the authors furthermore provide some relevant feedback to the community of visualization software developers and GPU-based rendering. \\
-\textcolor{blue}{\textbf{Reply:} We thank the referee for his/her nice words about our work.} \\
 
-\textbf{Referee:} My recommendation for minor revision is driven primarily due the interesting topic and results but the manuscript's language needs polishing and the disposition should be slightly revised. Detailed comments follow below.
+My recommendation for minor revision is driven primarily due the interesting topic and results but the manuscript's language needs polishing and the disposition should be slightly revised. Detailed comments follow below.
 Section 2 provides context but reads more like a background and related work for a flow simulation paper. Please shorten and provide an easier to read description of the properties the visualization should be conveying. Equations seem not so important, refer the reader to existing literature if they wish to get a deeper understanding. Present the qualitatively effects various parameters have and what questions and challenges the visualizations are expected to provide answers to. Explain what the scientists would be looking for. \\
-\textcolor{red}{To be done} \\
+
+\textcolor{blue}{\textbf{Response:} Please Alexander fill in this part which concerns your section} \\
 
 \textbf{Referee:}The last part of the last paragraph in section 2, from "We use ParaView..." should be moved and reworked into section 3. \\
-\textcolor{red}{To be done} \\
 
-\textbf{Referee:}I would like to see larger images in the final print so one clearly can see them. The tables need some work as well and could be made into graphs instead for more clarity and comparison. Please don't report FPS, rather provide render times in seconds (or ms). \\
-\textcolor{red}{To be done} \\
+\textcolor{blue}{\textbf{Response:} Indeed. We moved that at the beginning of section 3 to clearly differentiate between the numerical part (section 2), and the volume rendering setup.} \\
 
-\textbf{Referee:} Detailed comments: 
-In general, avoid "very" and "much" -- they have no clear meaning. \\
-\textcolor{red}{To be done} \\
+\textbf{Referee:} I would like to see larger images in the final print so one clearly can see them. The tables need some work as well and could be made into graphs instead for more clarity and comparison. Please don't report FPS, rather provide render times in seconds (or ms). \\
 
-\textbf{Referee:} Abstract: \\
-"make life" $\rightarrow$ "making life" \\
-"allow us" $\rightarrow$ "allowing us" \\
-\textcolor{blue}{\textbf{Reply:} A 'do' was added instead to the sentence to correct the grammar}. \\
+\textcolor{blue}{\textbf{Response:} We are not sure about the suggestion to use larger images, since we have to respect the two-column format. Table 3 was eliminated and replaced by a graph to allow much easier side-by-side comparisons of the startup times and average rendering times. Based also on Reviewer 1's comments, we are in fact able to add the performance numbers for the parallel implementation of the OSPRay-based rendering solution. This leads to a more balanced set of numbers, comparing all three rendering options at different scales (4, 8 and 12 compute nodes). All numbers previously expressed as Frames/sec are now expressed as rendering times.} \\
 
-\textbf{Referee:} "oceans also yield" $\rightarrow$ "oceans also carry" \\
-\textcolor{blue}{\textbf{Reply:} We have now substituted 'yield' with 'carry'.} \\
+\textbf{Referee:} "is a very mature field" -> I strongly argue the opposite, DVR is well known but TFs have no clear definitions, still many unresolved questions. \\
 
-\textbf{Referee:} "the circulation in" $\rightarrow$ "the currents in" \\
-\textcolor{blue}{\textbf{Reply:} We would like to let the referee know that with 'the circulation in the ocean' we want to refer to the whole ocean circulation, which is not only due to currents in the ocean but influenced by the whole climate system.} \\	
+\textcolor{blue}{\textbf{Response:} We can only agree with the reviewer that \underline{volume rendering itself} is not a mature field, and that the creation of color and opacity transfer functions is not a well-defined problem with clear-cut recipes. However, our statement in the text is about the visualization of three-dimensional scalar fields in general. We hope we can all agree on this fact. We mitigated our  comment, by stating later that volume rendering, as opposed to surface-based techniques, is “much more difficult to use” and transfer functions often defined in an “ad-hoc” manner. This is not the focus of the paper and we refer readers  to the excellent introduction in the VTK textbook.} \\
 
-\textbf{Referee:} "software-only" $\rightarrow$ "CPU-only" \\
-\textcolor{red}{Do we change this?} \\
+\textbf{Referee:} The reviewer offered many suggestions to improve the readability of our text, and to use a more adequate vocabulary \\
 
-\textbf{Referee:} Keywords: \\ "Naviers-Stokes" $\rightarrow$ "Navier-Stokes" \\
-\textcolor{blue}{\textbf{Reply:} This typo is now corrected.} \\
-
-\textbf{Referee:} Section 1: \\
-Remove year in citations: "(1988)", "(1999)" (you don't use them in the rest of the manuscript) \\
-\textcolor{blue}{\textbf{Reply:} The years are now removed.} \\
-
-\textbf{Referee:} "contribute a heat increase up to ~ 10ºC" $\rightarrow$ "contribute to a heat increase of up to ~10ºC" \\
-\textcolor{blue}{\textbf{Reply:} The words 'to' and 'of' were added to the sentence.} \\
-
-\textbf{Referee:} "available in ParaView" $\rightarrow$ "available in ParaView [xx]": Provide citation to ParaView.
-\textcolor{red}{Which reference?} \\
-
-\textbf{Referee:} "The deployment, the hardware ..., and the performance" $\rightarrow$ "The deployment, hardware ..., and performance " \\
-\textcolor{blue}{\textbf{Reply:} The two extra 'the' were used in this sentence to split the items of this enumeration into three subgroups: (1) the deployment; (2) the hardware and software requirements; (3) the performance.} \\
-
-\textbf{Referee:} Section 2: \\
-Provide more specific title: "Numerical Simulations" $\rightarrow$ "Sheared Thermal Convection Numerical Simulations" (or something) \\
-\textcolor{blue}{\textbf{Reply:} The subtitle was changed to 'Numerical Procedure' to further specify the content of the section.} \\
-	
-\textbf{Referee:} "Direct numerical..." $\rightarrow$ "The direct numerical..."\\
-\textcolor{red}{I don't like this change}\\
-
-\textbf{Referee:} First sentence is too long, break it up in two.\\
-\textcolor{blue}{\textbf{Reply:} A comma was added to break the sentence into two subsentences.}\\
-
-\textbf{Referee:} What of the simulations description and equations are essential for understanding and appreciate this context? Shorten this section. See overall comments above.\\
-\textcolor{blue}{\textbf{Reply:} We shortened the section and only left the most essential equations in the text. For all further details we reference in the text to the work of Blass et al. (2019).}\\
-
-\textbf{Referee:} The part starting with "We use ParaView v5.6.0..." should be reworked and moved into section 3.\\
-\textcolor{red}{To be done.}\\
-
-\textbf{Referee:} I would like this section to explain and motivate the visualization:
-Provide a qualitative description of the simulation and its relevant parameters
-What are the questions and parameters the domain scientists wish the visualizations to answer
-What are the main challenges posed by this type of simulations\\
-\textcolor{blue}{\textbf{Reply:} We would like to refer the referee to the paragraph in section 2 'While two-dimensional visualizations are very helpful...'. To further clarify the referee's concerns, we added a sentence referring to the main challenges.} \textcolor{red}{Add challenges}.\\
-
-
-Section 3
-
-"Visualization of three-..." $\rightarrow$ "Rendering of three-..." \\
-
-"is a very mature field" $\rightarrow$ I strongly argue the opposite, DVR is well known but TFs have no clear definitions, still many unresolved questions.\\
-
-"to get some sense" $\rightarrow$ "to make some sense"\\
-
-"through the volume" $\rightarrow$ "throughout the volume"\\
-
-"first made popular in" $\rightarrow$ "early applied to"\\
-
-ParaView's "Smart" VolumeMapper $\rightarrow$ What is meant by Smart in quotes?\\
-
-"Piz Daint supercomputer nodes has each node equipped" $\rightarrow$ "Piz Daint supercomputer has nodes ..."\\
-
-", so our priority" $\rightarrow$ ". Thus, our priority"\\
-
-"GPU ray casting implementation, against an NVIDIA-developed custom library called IndeX" $\rightarrow$ "GPU ray casting implementation against IndeX, an NVIDIA library"\\
-
-", and against a CPU-only" $\rightarrow$ ", as well as a CPU-only"\\
-
-", to give a valid option to" $\rightarrow$ ", to provide a valid option"\\
-
-"For all methods used," $\rightarrow$ "In all cases,"\\
-
-"to bypass driver optimizations." $\rightarrow$ Specifically what?\\
-
-"we use an EGL-based" $\rightarrow$ Clarify!\\
-
-"a memory hard limit" $\rightarrow$ Hosting systems allow more memory than GPUs "a hard memory limit, HPC compute nodes usually have more memory"\\
-
-"our mesh of over 9 billion voxels" $\rightarrow$ A bit confusing, I thought you had a structured grid of voxels, a volume, why saying mesh here?\\
-
-Figure 4: Difficult to see difference and details. What should the reader look at, what's different?\\
-
-"CPU to GPU transfer bus set the maximum..." $\rightarrow$ Explain! Host to GPU transfer bandwidth? PCIe 3 or 4?\\
-
-"is a three-dimensional volumetric" $\rightarrow$ "is a volumetric" (3D is redundant)\\
-
-"enable the visualization of" $\rightarrow$ "enable visualization of"\\
-
-"In Fig.   4" $\rightarrow$ "In Fig.~4": In Latex tilde avoids extended space after a dot.\\
-
-"our current implementation, we only use brick subdivisions." $\rightarrow$ "our case, we use brick subdivision only."\\
-
-"ParaView plugin which enables" $\rightarrow$ "ParaView plugin that enables"\\
-
-"of Piz Daint's alternate partition" $\rightarrow$ What "alternate"? Clarify\\
-
-"with SLURM's option" $\rightarrow$ what is SLURM?\\
-
-
-Section 4
-
-4.1: So there is no shading/lighting?\\
-
-"Fig.  6" $\rightarrow$ "Fig.~6"\\
-
-4.2: "at this scale of grid" $\rightarrow$ rewrite to get rid of overflow line\\
-
-"that particular mode, in a" $\rightarrow$ "that particular mode in a"\\
-
-"initial pixel coverage of about 80$\%$" $\rightarrow$ Clarify! I may guess what you mean but I'm not supposed to.\\
-
-"frame buffer pixel resolution" $\rightarrow$ "frame buffer resolution"\\
-
-Table 2: A chart/graph may be better to show the scaling\\
-
-Table 3: A graph might be better. Use rendering time instead of FPS.\\
-
-"is transfered over from CPU" $\rightarrow$ "is transfered from CPU"\\
-
-"we see frames per second rates grow" $\rightarrow$ "we see rendering times reduced"\\
-
-"once and are then discarded" $\rightarrow$ "once and then discarded"\\
-
-"(resp.  16 and 25 seconds)" $\rightarrow$ "(resp.~25 and 16 seconds)" - Why would 8 nodes read faster than 12 nodes? I am guessing a type here.\\
-
-"IndeX has the most" $\rightarrow$ "IndeX is the most"\\
-
-"Discussion with the NVIDIA" $\rightarrow$ "Discussions with NVIDIA"\\
-
-"will be much improved" $\rightarrow$ "will be improved"\\
-
-"is still a very new development" $\rightarrow$ "is still in early development"\\
-
-
-Section 5
-
-"36G bytes" $\rightarrow$ "36 GB"\\
-
-"banks are easily found" $\rightarrow$ "banks are usually found"\\
-
-"ParaView, thanks to its" $\rightarrow$ "ParaView, due to its"\\
-
-"new library in current development" $\rightarrow$ "new library in development"\\
-
-"This also fit very well" $\rightarrow$ "This also fits well"\\
-
-"Our experience is of interest for quite a few" $\rightarrow$ "Our experiences are of interest for several"\\
-
-"Our emphasis in creating" $\rightarrow$ "Our emphasis on creating"\\
-
-"The edition of color and opacity transfer function" $\rightarrow$ "Setting appropriate color and opacity in the transfer functions" - I do disagree that a TF is simply about setting color and opacity, but that is another topic and cause for rejection of the notion that volume rendering is a mature field.\\
-
-"either hardware-based, or software-based" $\rightarrow$ "either hardware- or software-based": one may argue if this is software vs hardware or CPU vs GPU -- they are both programmed, i.e. software-based!\\
-
-"time-dependent simulations outputs" $\rightarrow$ "time-dependent simulation outputs "\\
-
-"This was primordial" $\rightarrow$ "This was pivotal"\\
-
-"However, we were unable" $\rightarrow$ "We were, however, unable": Why?\\
-
-"analyse our large-grid" $\rightarrow$ "analyse our large grid"\\
-
-"with very complex impact to our future" $\rightarrow$ Drop "very", and what do you mean? Far reaching consequences?\\
-
-"Further, " $\rightarrow$ "Furthermore,"\\
-
-"Going forward, ..." $\rightarrow$ I suggest to drop this last sentence. It is unclear and too general.\\
-
-"develop this approach" $\rightarrow$ what specific approach are you referring to?\\
-
-
-Acknowledgement \\
-
-"Dave Demarle" $\rightarrow$ "David DeMarle"
+\textcolor{blue}{\textbf{Response:} Most corrections suggested have been made, and we thank the reviewer for his/her very careful reading.} \\
 \end{document}
