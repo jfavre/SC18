@@ -4,33 +4,22 @@
 
 \title{Response to the comments of Referee \# 1}
 
-
 \begin{document}
 \maketitle
 \textbf{Referee:} This paper reviews a comparison of 3 volume rendering techniques available in ParaView. The comparison is important and the observations will have real-world effects, thank you for writing this paper. The paper is generally well written and understandable. \\
-\textcolor{blue}{\textbf{Response:} We thank the referee for his/her nice words about our work. } \\
 
 My only overall gripe is that I have a hard time deciding how important the GPU units are. The only table in which GPU is directly compared with the CPU is in Table 1. you claim in the conclusion that you didn't do distributed memory parallel for OSPRay because it didn't support threads per process in your MPI environment... Why? (I thought that worked...) Certainly you could have done a single MPI process for each core, which isn't optimal, but would have at least allowed some kind of comparison of the GPU vs. CPU.  (This is important for in situ and spec'ing dedicated visualization machines: get more large nodes or get more nodes with GPUs?). Can I use OSPRay to get interactive rendering on the full data with sufficient resources and full pixel coverage? At a minimum I would like to see a bit more explanation as to why not distributed memory parallel without GPU.\\
-\textcolor{red}{To be done}
 
-\textbf{Referee:} Some other nits(some necessary, some just suggestions):
-For this paper, in this context, you should note this is a paper that accompanied a visualization showcase entry in the introduction or remove references to the showcase like "For this visualization showcase ..." \\
-\textcolor{blue}{\textbf{Response:} To further clarify this, we moved the following sentence from section 2 to the introduction. 'In the accompanying video [citation to Favre et al.] we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters.' } \\
+\textcolor{blue}{\textbf{Response:} The reason we had not presented parallel runs on the CPUs was due to two documented bugs \cite{issue1, issue2}. The first issue is the most severe. We managed to find a compromise, switching to an alternate viewer module based also on OSPRay (this functionality should not be confused with the OSPRay-based volume renderer mapper itself). Switching viewers, process boundary artifacts are much less visible given the very high resolution grid we deal with. We felt like these artifacts would have very minimal impact on performance, such that we could indeed include them in a remodeled section 4. Section 4 now includes a complete comparison of all three methods, running on a parallel set of nodes, with the full resolution data.} \\
 
+\textbf{Referee:} For this paper, in this context, you should note this is a paper that accompanied a visualization showcase entry in the introduction or remove references to the showcase like "For this visualization showcase ..." \\
 
-\textbf{Referee:} "Our hopes is that ..."  $\rightarrow$ our hope is \\
-\textcolor{blue}{\textbf{Response:} This typo was corrected.} \\
+\textcolor{blue}{\textbf{Response:} To further clarify this, we remodelled and moved the following sentence from section 2 to the introduction. 'The deployment and evaluation of the hardware and software requirements of these libraries was motivated by a showcase submission at the 2018 International Conference for High Performance Computing, Networking, Storage and Analysis. In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters.' } \\
 
-“Amongst” $\rightarrow$ among\\
+\textbf{Referee:} Some other nits(some necessary, some just suggestions) \\
 
-“Transferred over from CPU …” $\rightarrow$ transferred from cpu to\\ 
+\textcolor{blue}{\textbf{Response:} all corrections suggested have been made.} \\
 
-“The edition of color” $\rightarrow$ The addition of color\\
-
-“Analyse” $\rightarrow$ analyze\\
-
-“(XAC)” is blowing the column margin … (you could start that sentence with a “The”?)\\
-
-In the abstract: “we evaluate different implementations” $\rightarrow$ We evaluate different volume rendering implementations ….\\
-
+\bibliographystyle{elsarticle-num} 
+\bibliography{bibliography-referees-answers}
 \end{document}
