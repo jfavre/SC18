@@ -144,7 +144,7 @@ We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with stream
 
 The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-\textcolor{black}{We used} data from Blass et al. \cite{bla19} \textcolor{black}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{black}{study their influence on} the flow field. \textcolor{black}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$\cite{bla19}.} 
+\textcolor{black}{We used} data from Blass et al. \cite{bla19} \textcolor{black}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{black}{study their influence on} the flow field. \textcolor{black}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$.} 
 
 %The equations read:
 
@@ -187,7 +187,7 @@ get stretched into large streaks (Fig. \ref{fig:overview}b). If the shearing is
 further increased, these streaks become instable and start meandering in the
 final flow state (Fig. \ref{fig:overview}c,d).}
 
-\textcolor{black}{The reason for this streaky flow behavior is the addition of a third dimension to originally quasi-two-dimensional flow structures in pure thermal convection. Such thermal convection rolls are driven solely by the thermal difference between the plates. Once the wall shearing is added, the flow starts to strongly move in streamwise direction, which causes the development of streaks.} \\
+\textcolor{black}{The reason for this streaky flow behavior is the addition of a third dimension to originally quasi-two-dimensional flow structures in pure thermal convection. Such thermal convection rolls are driven solely by the thermal difference between the plates. Once the wall shearing is added, the flow starts to strongly move in streamwise direction, which causes the development of streaks.}
 
 In turbulent flows it is very important to research how certain characteristic
 parameters are influenced by the flow. In thermal convection, the heat transfer, non-dimensionally
@@ -210,7 +210,7 @@ The opportunity to observe the flow evolving and transitioning through different
 	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re_w=6000 $.}
 \end{figure}
 
-It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. \textcolor{black}{In the shear dominated regime, which we visualize in the accompanying video \cite{fav18}, we can observe extremely large-scale structures which are caused by a combination of thermal and shear forcing.} The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}). \\
+It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. \textcolor{black}{In the shear dominated regime, which we visualize in the accompanying video \cite{fav18}, we can observe extremely large-scale structures which are caused by a combination of thermal and shear forcing.} The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}).
 
 \section{Volume Rendering Libraries and Setup}
 
