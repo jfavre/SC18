@@ -81,15 +81,15 @@ University of Twente, P.O. Box 217, 7500 AE Enschede, The Netherlands}
 Oceans play a big role in the nature of our planet. About $ 70 \% $ of our earth
 is covered by water \cite{int14}. Strong currents are transporting warm water around the world making life possible, and allowing us to harvest its
 power producing energy. Yet, oceans also
-\textcolor{blue}{carry} a much more deadly side. Floods and tsunamis can easily annihilate whole
+\textcolor{black}{carry} a much more deadly side. Floods and tsunamis can easily annihilate whole
 cities and destroy life in seconds. The earth's climate system is also very much
-linked to the \textcolor{blue}{currents} in the ocean due to its large coverage of the earth's surface.
+linked to the \textcolor{black}{currents} in the ocean due to its large coverage of the earth's surface.
 Deep ocean currents can be simulated by means of wall-bounded turbulent flow simulations.
 To support these very large scale numerical simulations and enable the scientists to interpret their output,
 we deploy an interactive visualization framework to study sheared thermal convection.
 The visualizations are based on volume renderings of the temperature field.
 To address the needs of supercomputer users with different hardware and software resources,
-we evaluate different \textcolor{blue}{volume rendering} implementations supported in the ParaView \cite{Ahrens2005} environment:
+we evaluate different \textcolor{black}{volume rendering} implementations supported in the ParaView \cite{Ahrens2005} environment:
 two GPU-based solutions with Kitware's native volume mapper or NVIDIA's IndeX library,
 and a CPU-only Intel OSPRay-based implementation.
 
@@ -116,12 +116,12 @@ Scientific Visualization \sep High Performance Computing \sep Navier-Stokes Solv
 \section{Introduction}
 \label{sec:Introduction}
 
-Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer \cite{man88} observed that it can contribute \textcolor{blue}{to a heat increase of up to $ \sim 10 ^ \circ $C} on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
+Thermohaline ocean circulation \cite{rah00} is vital for the heat budget of our earth. Manabe and Stouffer \cite{man88} observed that it can contribute \textcolor{black}{to a heat increase of up to $ \sim 10 ^ \circ $C} on the yearly averaged mean surface temperatures in the North Atlantic region. Marshall and Schott \cite{mar99} investigated a vast variety of scales in ocean dynamics and stated that deep convection can be related to mixing layers everywhere in the ocean. Since there are many complex three-dimensional events happening in large-scale fluid bodies such as oceans, it is vital to visualize the three-dimensional and temporal features of such flow simulations.
 
-We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView \cite{Ahrens2005} to build a time-dependent volume rendering of thermal convection. \textcolor{blue}{The deployment and evaluation of the hardware and software requirements of these libraries was motivated by a showcase submission at the 2018 International Conference for High Performance Computing, Networking, Storage and Analysis. In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters.} 
+We study these large-scale bodies of fluids which are sheared by winds or currents and influenced by temperature differences in the flow. A fundamental setup of this natural mechanism is sheared thermal convection. Many processes in nature are based on heat and momentum transfer and therefore interaction between buoyancy \cite{ahl09,loh10} and shear \cite{smi11,bar07}. Rayleigh-B\'enard convection, the flow in a box heated from below and cooled from above is a paradigmatic system for thermal convection. We present the use of three different rendering libraries available in ParaView \cite{Ahrens2005} to build a time-dependent volume rendering of thermal convection. \textcolor{black}{The deployment and evaluation of the hardware and software requirements of these libraries was motivated by a showcase submission at the 2018 International Conference for High Performance Computing, Networking, Storage and Analysis. In the accompanying video \cite{fav18} we are able to display the previously two-dimensionally presented flow structures in a three-dimensional motion. The reader is led through a presentation of one specific flow case with sheared thermal convection and can experience the dynamics of the thermal structures while being informed about different flow parameters.} 
 
-\section{Numerical \textcolor{blue}{Simulations for Sheared Thermal Convection}}
-\textcolor{blue}{The} direct numerical simulations (DNS) were performed with the second-order finite-difference
+\section{Numerical \textcolor{black}{Simulations for Sheared Thermal Convection}}
+\textcolor{black}{The} direct numerical simulations (DNS) were performed with the second-order finite-difference
 code \textit{AFiD} \cite{poe15c}, in which the three-dimensional non-dimensional
 Navier-Stokes equations with the Boussinesq approximation are solved on a staggered grid.
 
@@ -144,7 +144,7 @@ We use $ \boldsymbol{u}=u(\boldsymbol{x},t) $ as the velocity vector with stream
 
 The open source finite-difference Navier-Stokes solver \textit{AFiD} \cite{poe15c} was written in Fortran 90 to study large-scale wall bounded turbulent flow simulations. In collaboration with NVIDIA, USA, the code was ported in its newest version to a GPU setting using an MPI and CUDA Fortran hybrid implementation optimized to run and solve large flow fields \cite{zhu18b}.
 
-\textcolor{blue}{We used} data from Blass et al. \cite{bla19} \textcolor{blue}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{blue}{study their influence on} the flow field. \textcolor{blue}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla19}.} 
+\textcolor{black}{We used} data from Blass et al. \cite{bla19} \textcolor{black}{during our evaluation of volume rendering}, where a parameter study over different input parameters was conducted to \textcolor{black}{study their influence on} the flow field. \textcolor{black}{Control parameters were the temperature difference between the top and bottom plates as the strength of the thermal forcing, non-dimensionalized as the Rayleigh number $Ra$, and the wall velocity as the strength of the shear forcing, non-dimensionalized as the wall shear Reynolds number $Re_w$, while keeping the Prandtl number $Pr$, which is the ratio of thermal and viscous viscosity of a fluid, at unity \cite{bla19}.} 
 
 %The equations read:
 
@@ -179,7 +179,7 @@ for $ Ra=2.2 \times 10^6 $ and (a) $ Re_w=0 $, (b) $ Re_w=2000 $, (c) $ Re_w=300
 
 In Fig. \ref{fig:overview} we present snapshots of temperature
 fields at mid height in different flow regimes. It can be observed that the flow passes from a
-thermally dominated regime with large \textcolor{blue}{thermal convection rolls driving the flow (Fig. \ref{fig:overview}a) into a
+thermally dominated regime with large \textcolor{black}{thermal convection rolls driving the flow (Fig. \ref{fig:overview}a) into a
 regime where the mechanical forcing is dominant. Here, large-scale meandering
 structures can be observed which are driven by the shearing of the top and bottom plates (Fig. \ref{fig:overview}d). To undergo a transition between the
 regimes, the flow has to pass through an intermediate stage, in which the thermal plumes
@@ -187,11 +187,11 @@ get stretched into large streaks (Fig. \ref{fig:overview}b). If the shearing is
 further increased, these streaks become instable and start meandering in the
 final flow state (Fig. \ref{fig:overview}c,d).}
 
-\textcolor{blue}{The reason for this streaky flow behavior is the addition of a third dimension to originally quasi-two-dimensional flow structures in pure thermal convection. Such thermal convection rolls are driven solely by the thermal difference between the plates. Once the wall shearing is added, the flow starts to strongly move in streamwise direction, which causes the development of streaks.} \\
+\textcolor{black}{The reason for this streaky flow behavior is the addition of a third dimension to originally quasi-two-dimensional flow structures in pure thermal convection. Such thermal convection rolls are driven solely by the thermal difference between the plates. Once the wall shearing is added, the flow starts to strongly move in streamwise direction, which causes the development of streaks.} \\
 
 In turbulent flows it is very important to research how certain characteristic
 parameters are influenced by the flow. In thermal convection, the heat transfer, non-dimensionally
-defined through the Nusselt number \textcolor{blue}{$Nu$} is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
+defined through the Nusselt number \textcolor{black}{$Nu$} is a good indicator if changing flow structures have a supporting effect or may disrupt a previously transport-favorable flow situation. 
 
 %\begin{equation} %Nusselt equation
 %Nu= \frac{Qh}{\kappa \Delta \theta}
@@ -210,7 +210,7 @@ The opportunity to observe the flow evolving and transitioning through different
 	\caption{\label{fig:smallscale} Zoom of an snapshot of the temperature field (top) and the vorticity structures (bottom) at $ Ra=2.2 \times 10^6 $ and $ Re_w=6000 $.}
 \end{figure}
 
-It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. \textcolor{blue}{In the shear dominated regime, which we visualize in the accompanying video \cite{fav18}, we can observe extremely large-scale structures which are caused by a combination of thermal and shear forcing.} The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}). \\
+It has been previously shown in thermal convection that the large thermal plumes can be traced until very close to the heated and cooled plates \cite{ste18}. So it is very important to also observe the emergence of structures close to the boundary layer. \textcolor{black}{In the shear dominated regime, which we visualize in the accompanying video \cite{fav18}, we can observe extremely large-scale structures which are caused by a combination of thermal and shear forcing.} The detailed visualizations we presented allow us to not only follow the large-scale structures, but also the interaction of small-scale structures much closer to the plates (Fig. \ref{fig:smallscale}). \\
 
 \section{Volume Rendering Libraries and Setup}
 
@@ -242,7 +242,7 @@ We refer readers to other sources \cite{VTKTextbook} to dive more deeply into th
 %\newline
 
 Volume Rendering can be implemented in different manners. ParaView was chosen because it offers a testbed
-for several state-of-the-art implementations which can be selected based on rendering parameters and
+for several state of the art implementations which can be selected based on rendering parameters and
 available hardware.
 %\newline
 
@@ -281,7 +281,7 @@ the aggregate memory of the different GPUs.
 
 Our third option, uses Intel OSPRay and software rendering. HPC compute nodes usually
 have more memory than their GPU counterparts. We use Piz Daint's high memory nodes
-with 128 GB of RAM, where our \textcolor{blue}{grid} of over 9 billion voxels can be fit
+with 128 GB of RAM, where our \textcolor{black}{grid} of over 9 billion voxels can be fit
 easily on a single node.
 
 \subsection{ParaView's GPU Ray Casting} \label{smart}
@@ -317,12 +317,12 @@ bring an implementation of IndeX to ParaView, and we have enjoyed the benefits
 of a close partnership between the Swiss National Supercomputing Center (CSCS)
 and NVIDIA, to be able to use IndeX in a multi-GPU setting. We use the ParaView
 plugin v2.2 with the core library NVIDIA IndeX 2.0.1.
-\textcolor{blue}{The} NVIDIA IndeX Accelerated Compute (XAC) interface integrates the core surface
+\textcolor{black}{The} NVIDIA IndeX Accelerated Compute (XAC) interface integrates the core surface
 and volume sampling programs written in CUDA \cite{SC18IndexShowcase}.
 For this case, we have used the generic programs provided by IndeX, without custom programming.
 In Fig.~\ref{fig:gpucloseup} we show side-by-side renderings done with the
-two GPU-based libraries, \textcolor{blue}{to demonstrate that their produce equivalent images.
-The ParaView Graphical user Interface insures that both implementations use identical
+two GPU-based libraries, \textcolor{black}{to demonstrate that their produce equivalent images.
+The ParaView Graphical User Interface insures that both implementations use identical
 color and opacity transfer functions and sampling rates.} ParaView's
 GPU Ray Casting image (left) is used as reference. Differences of
 illumination are barely noticable to the human eye.
@@ -331,8 +331,8 @@ illumination are barely noticable to the human eye.
 
 OSPRay \cite{OSPRay} is a ray tracing framework for CPU-based rendering. It supports advanced 
 shading effects, large models and non-polygonal primitives. OSPRay can distributes 
-``bricks'' of data as well as ``tiles'' of the framebuffer, although in \textcolor{blue}{our case, we use brick subdivisions only}. The Texas Advanced Computing Center
-has developed a ParaView plugin \textcolor{blue}{that} enables us to test the possibility of
+``bricks'' of data as well as ``tiles'' of the framebuffer, although in \textcolor{black}{our case, we use brick subdivisions only}. The Texas Advanced Computing Center
+has developed a ParaView plugin \textcolor{black}{that} enables us to test the possibility of
 using a ray-tracing based rendering engine for volumetric rendering. This is
 the best solution for clusters where no GPU hardware is available.
 
@@ -345,8 +345,8 @@ The emphasis is no more on data parallelism, but rather on multi-threaded execut
 A complete \it{software-only} \rm ParaView installation was deployed with an LLVM-based and
 OpenGL Mesa layer. We used Mesa v17.2.8, compiled with LLVM v5.0.0, and the
 OSPRay v1.7.2 library to provide a very efficient multi-threaded execution path
-taking advantage of Piz Daint's \textcolor{blue}{second} partition of compute nodes. These nodes
-are built with two Intel Broadwell CPUs (2x18 cores and 64/128 GB RAM). \textcolor{blue}{Our
+taking advantage of Piz Daint's \textcolor{black}{second} partition of compute nodes. These nodes
+are built with two Intel Broadwell CPUs (2x18 cores and 64/128 GB RAM). \textcolor{black}{Our
 cluster management and job scheduling system} SLURM provides the specific scheduling options
 ``\texttt{--}cpus-per-task=72 \texttt{--}ntasks-per-core=2'' to effectively
 take full advantage of the multi-threading exposed by the LLVM and OSPRay libraries. 
@@ -527,7 +527,7 @@ voxels data set will not fit on a single GPU. Likewise, in an \it{in-situ} \rm
 scenario, the visualization would most likely use a parallel 
 set of nodes. Loading our full-size data, we rounded up our evaluation of all
 three rendering options, by measuring the initial cost
-for the first image (after all I/O has been done), and also the \textcolor{blue}{average rendering time}
+for the first image (after all I/O has been done), and also the \textcolor{black}{average rendering time}
 in a scripted animation loop. Fig.~\ref{fig:diagram} summarizes our results,
 with the dataset distributed among 4, 8 and 12 compute nodes.
 
@@ -572,18 +572,18 @@ Our animation benchmark loads a single timestep of data, thus, once the data has
 hardly any CPU to GPU communication apart from a single frame buffer image.
 For the CPU-based implementation, the build-up of the ray-tracing
 acceleration structures takes just over one second so there is less difference across the few tests executed.
-We see \textcolor{blue}{rendering times reduced} somewhat linearly since there is less workload. 
+We see \textcolor{black}{rendering times reduced} somewhat linearly since there is less workload. 
 In a movie production setting where all timestep outputs are read once, rendered once
 and then discarded, the startup cost of any rendering library needs to be weighted
 against the I/O costs. Although our data I/O statistics show quite a bit of variation
 because of the high load of our multi user system with over 5000 compute nodes,
-our simulation data are read, \it{in average}\rm, in about 32 seconds \textcolor{blue}{(resp.~25, and 16 seconds)}
+our simulation data are read, \it{in average}\rm, in about 32 seconds \textcolor{black}{(resp.~25, and 16 seconds)}
 on 4 nodes (resp.~8 and 12 nodes). We see that the initialization of the rendering sub-system
 has a greater impact than suspected, and that in an \it{in-situ} \rm scenario,
 it would be the singlemost important barrier to performance. The initialization of
-the NVIDIA IndeX \textcolor{blue}{is} the most significant bottleneck. Discussions with NVIDIA
-are on-going and our \textcolor{blue}{hope} is that this will be improved in future versions of the
-SDK since the library is still \textcolor{blue}{in early} development. We comment
+the NVIDIA IndeX \textcolor{black}{is} the most significant bottleneck. Discussions with NVIDIA
+are on-going and our \textcolor{black}{hope} is that this will be improved in future versions of the
+SDK since the library is still \textcolor{black}{in early} development. We comment
 here that the parallel execution of the OSPRay-based volume rendering was made possible
 by using yet another ParaView mode, letting the OSPRay library take full control
 of the overal scene and parallel frame compositing. Finally, we highlight the fact
@@ -595,12 +595,12 @@ can be satisfactory during the prototyping phase of a visualization.
 
 We have discussed three implementations of volume rendering for a thermal convection
 simulation output of substantial size. Our time-dependent output is stored as a
-\it{float32} \rm array of \textcolor{blue}{36GB} per timestep. This is a non-trivial size for the most common
+\it{float32} \rm array of \textcolor{black}{36GB} per timestep. This is a non-trivial size for the most common
 GPUs. This leaves the scientist with two options: 1) use a data-parallel visualization
 application with GPU-assisted rendering, or 2) use a \it{software-only} \rm
 visualization environment which can fit on compute nodes where large memory
-banks are \textcolor{blue}{usually} found. Our choice was to deploy a single application, the open-source
-ParaView, \textcolor{blue}{due} to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
+banks are \textcolor{black}{usually} found. Our choice was to deploy a single application, the open-source
+ParaView, \textcolor{black}{due} to its support for different parallel execution paradigms, and for its ability to work with different off-screen and on-screen rendering backends. Having a single application,
 driven by fully automatized python scripts and a benchmarking suite of tools
 available in ParaView itself, enabled us to confront all possible implementations with reduced variability.
 %\newline
@@ -610,13 +610,13 @@ We tested two GPU-based rendering options. We first used ParaView's native volum
 
 We evaluated an implementation of volume rendering provided by the Intel OSPRay library,
 a software-based framework which can take remarkable advantage of a multi-threaded
-execution layer. This also \textcolor{blue}{fits} well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience\textcolor{blue}{s are of interest for several} computer platforms around the world where graphics hardware is not available. 
+execution layer. This also \textcolor{black}{fits} well on a subset of our available hardware, a dual-Xeon based compute node without GPU. Our experience\textcolor{black}{s are of interest for several} computer platforms around the world where graphics hardware is not available. 
 
-Our emphasis \textcolor{blue}{o}n creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
-First, having an interactive environment enabling us to prototype the visualization with large scale data. The \textcolor{blue}{editing} of color and opacity transfer functions is the most demanding step in
-deriving the proper visualization, and we were able to provide an interactive setup using either \textcolor{blue}{hardware-, or software-based} volume rendering. Dealing with long time-dependent simulation outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was \textcolor{blue}{pivotal} for a quick turn-around time. The OSPRay-based implementation had the best performance in both initialization and average rendering time, but suffered from some parallel image compositing artifacts at inter-process boundaries. Given the very high spatial resolution of our grid, these artifacts are only visible at extreme zooming in the vicinity of ghost-cells between MPI-distributed data. Nonetheless, to ensure the best visual quality, the compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
+Our emphasis \textcolor{black}{o}n creating the scientific visualization shown in the accompanying video \cite{fav18} was two-fold. 
+First, having an interactive environment enabling us to prototype the visualization with large scale data. The \textcolor{black}{editing} of color and opacity transfer functions is the most demanding step in
+deriving the proper visualization, and we were able to provide an interactive setup using either \textcolor{black}{hardware-, or software-based} volume rendering. Dealing with long time-dependent simulation outputs was the second requirement, and the path to achieve high productivity was to use parallel and scalable I/O routines. We used VTK's native XML partitioned file format convention for cartesian image data. This was \textcolor{black}{pivotal} for a quick turn-around time. The OSPRay-based implementation had the best performance in both initialization and average rendering time, but suffered from some parallel image compositing artifacts at inter-process boundaries. Given the very high spatial resolution of our grid, these artifacts are only visible at extreme zooming in the vicinity of ghost-cells between MPI-distributed data. To conclude and ensure the best visual quality, the compromise for movie production was to use small subsets of GPU nodes with ParaView's native volume renderer.
 
-The volume rendering benchmarking platform deployed to analy\textcolor{blue}{z}e our large grid simulations provides a unique chance to observe sheared thermal convection in a very simple system with \textcolor{blue}{far reaching consequences}. Further\textcolor{blue}{more}, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics.
+The volume rendering benchmarking platform deployed to analy\textcolor{black}{z}e our large grid simulations provides a unique chance to observe sheared thermal convection in a very simple system with \textcolor{black}{far reaching consequences}. Further\textcolor{black}{more}, the visualizations allow us to have a very good first insight into the interplay between thermal convection and flow shearing by different kinds of wind and flow currents. We are now able to better understand the emergence and behavior of flow structures transporting heat through the system and affecting the flow dynamics.
 
 
 %% The Appendices part is started with the command \appendix;
